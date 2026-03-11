@@ -1,15 +1,9 @@
 {
-  "background_color": "#ffffff",
-  "dir": "auto",
+  "name": "Vipindi App",
+  "short_name": "Vipindi",
+  "start_url": "./index.html",
   "display": "standalone",
-  "name": "nguligulisecondary.github",
-  "orientation": "natural",
-  "scope": "/https://nguligulisecondary.github.io/Ratiba-ya-vipindi/",
-  "short_name": "Vipindi app",
-  "start_url": "/https://nguligulisecondary.github.io/Ratiba-ya-vipindi/",
+  "background_color": "#ffffff",
   "theme_color": "#ffffff",
-  "lang": "en",
-  "categories": [
-    "education"
-  ]
+  "orientation": "portrait"
 }
