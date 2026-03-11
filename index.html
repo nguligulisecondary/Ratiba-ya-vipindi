@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ratiba ya Vipindi</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input { margin: 5px; padding: 5px; width: 150px; }
+    button { padding: 5px 10px; margin: 5px; }
+    ul { margin-top: 20px; }
+    li { margin: 5px 0; }
+    .editBtn, .deleteBtn { margin-left: 10px; padding: 2px 5px; font-size: 12px; }
+  </style>
+</head>
+<body>
+
+<h2>Ratiba ya Vipindi</h2>
+
+<input id="somo" placeholder="Somo">
+<input id="mwalimu" placeholder="Mwalimu">
+<input id="muda" placeholder="Muda (HH:mm)">
+<button onclick="ongeza()">Add</button>
+
+<ul id="ratiba"></ul>
+
+<!-- Audio for notification -->
+<audio id="alarm">
+  <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
+</audio>
+
+<script>
+let RATIBA = [];
+
+// Load from localStorage
+if(localStorage.getItem("ratiba")){
+  RATIBA = JSON.parse(localStorage.getItem("ratiba"));
+  RATIBA.forEach(function(item,index){
+    displayItem(item,index);
+  });
+}
+
+// Add new item
+function ongeza(){
+  let somo = document.getElementById("somo").value.trim();
+  let mwalimu = document.getElementById("mwalimu").value.trim();
+  let muda = document.getElementById("muda").value.trim();
+
+  if(somo === "" || mwalimu === "" || muda === "") return;
+
+  let item = {somo: somo, mwalimu: mwalimu, muda: muda};
+  RATIBA.push(item);
+  localStorage.setItem("ratiba", JSON.stringify(RATIBA));
+  displayItem(item,RATIBA.length-1);
+
+  // clear inputs
+  document.getElementById("somo").value = "";
+  document.getElementById("mwalimu").value = "";
+  document.getElementById("muda").value = "";
+}
+
+// Display item in list with edit/delete
+function displayItem(item,index){
+  let li = document.createElement("li");
+  li.id = "item"+index;
+  li.textContent = item.somo + " - " + item.mwalimu + " - " + item.muda;
+
+  // Edit button
+  let editBtn = document.createElement("button");
+  editBtn.textContent = "Edit";
+  editBtn.className = "editBtn";
+  editBtn.onclick = function(){
+    let newSomo = prompt("Somo:", item.somo);
+    let newMwalimu = prompt("Mwalimu:", item.mwalimu);
+    let newMuda = prompt("Muda (HH:mm):", item.muda);
+    if(newSomo && newMwalimu && newMuda){
+      item.somo = newSomo;
+      item.mwalimu = newMwalimu;
+      item.muda = newMuda;
+      RATIBA[index] = item;
+      localStorage.setItem("ratiba", JSON.stringify(RATIBA));
+      document.getElementById("item"+index).textContent = item.somo + " - " + item.mwalimu + " - " + item.muda;
+      document.getElementById("item"+index).appendChild(editBtn);
+      document.getElementById("item"+index).appendChild(deleteBtn);
+    }
+  };
+
+  // Delete button
+  let deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Delete";
+  deleteBtn.className = "deleteBtn";
+  deleteBtn.onclick = function(){
+    RATIBA.splice(index,1);
+    localStorage.setItem("ratiba", JSON.stringify(RATIBA));
+    li.remove();
+    refreshList();
+  };
+
+  li.appendChild(editBtn);
+  li.appendChild(deleteBtn);
+  document.getElementById("ratiba").appendChild(li);
+}
+
+// Refresh list after delete
+function refreshList(){
+  document.getElementById("ratiba").innerHTML = "";
+  RATIBA.forEach(function(item,index){
+    displayItem(item,index);
+  });
+}
+
+// Notification every minute
+setInterval(function(){
+  let now = new Date();
+  let hh = now.getHours().toString().padStart(2,'0');
+  let mm = now.getMinutes().toString().padStart(2,'0');
+  let currentTime = hh + ":" + mm;
+
+  RATIBA.forEach(function(item){
+    if(item.muda === currentTime){
+      alert("Kipindi cha " + item.somo + " kinaanza sasa!");
+      document.getElementById("alarm").play();
+    }
+  });
+}, 60000); // check every minute
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(reg => console.log('Service Worker ime-register: ', reg))
+      .catch(err => console.log('Service Worker registration failed: ', err));
+  }
+</script>
+</body>
+</html>
