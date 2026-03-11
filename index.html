@@ -1,127 +1,166 @@
 <!DOCTYPE html>
-<html>
+<html lang="sw">
 <head>
-  <title>Ratiba ya Vipindi</title>
-  <style>
-    body { font-family: Arial; padding: 20px; }
-    input { margin: 5px; padding: 5px; width: 150px; }
-    button { padding: 5px 10px; margin: 5px; }
-    ul { margin-top: 20px; }
-    li { margin: 5px 0; }
-    .editBtn, .deleteBtn { margin-left: 10px; padding: 2px 5px; font-size: 12px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ratiba ya Vipindi</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; background: #f0f2f5; }
+  h2 { text-align: center; color: #333; }
+  input, select, button { padding: 8px; margin: 5px; font-size: 16px; }
+  ul { list-style: none; padding: 0; }
+  li { background: #fff; margin: 5px 0; padding: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+  .actions button { margin-left: 5px; }
+  .filter { margin-bottom: 15px; }
+  @media(max-width:600px){
+    li { flex-direction: column; align-items: flex-start; }
+    .actions { margin-top: 5px; }
+  }
+</style>
 </head>
 <body>
 
 <h2>Ratiba ya Vipindi</h2>
 
-<input id="somo" placeholder="Somo">
-<input id="mwalimu" placeholder="Mwalimu">
-<input id="muda" placeholder="Muda (HH:mm)">
-<button onclick="ongeza()">Add</button>
+<div>
+  <input type="text" id="somo" placeholder="Somo">
+  <input type="text" id="mwalimu" placeholder="Mwalimu">
+  <input type="time" id="muda">
+  <input type="text" id="class" placeholder="Darasa/Form">
+  <button onclick="addSomo()">Add</button>
+</div>
 
-<ul id="ratiba"></ul>
+<div class="filter">
+  <input type="text" id="search" placeholder="Search Somo au Mwalimu" onkeyup="filterList()">
+  <select id="filterClass" onchange="filterList()">
+    <option value="">Chagua Darasa</option>
+  </select>
+</div>
 
-<!-- Audio for notification -->
-<audio id="alarm">
-  <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
-</audio>
+<ul id="scheduleList"></ul>
 
 <script>
-let RATIBA = [];
+// Load saved data
+let schedule = JSON.parse(localStorage.getItem('schedule')) || [];
 
-// Load from localStorage
-if(localStorage.getItem("ratiba")){
-  RATIBA = JSON.parse(localStorage.getItem("ratiba"));
-  RATIBA.forEach(function(item,index){
-    displayItem(item,index);
+// Populate class filter
+function updateClassFilter(){
+  const classSet = new Set(schedule.map(s=>s.class).filter(c=>c));
+  const filterClass = document.getElementById('filterClass');
+  filterClass.innerHTML = '<option value="">Chagua Darasa</option>';
+  classSet.forEach(c=>{
+    const opt = document.createElement('option');
+    opt.value = c; opt.textContent = c;
+    filterClass.appendChild(opt);
   });
 }
 
-// Add new item
-function ongeza(){
-  let somo = document.getElementById("somo").value.trim();
-  let mwalimu = document.getElementById("mwalimu").value.trim();
-  let muda = document.getElementById("muda").value.trim();
+// Add Somo
+function addSomo(){
+  const somo = document.getElementById('somo').value.trim();
+  const mwalimu = document.getElementById('mwalimu').value.trim();
+  const muda = document.getElementById('muda').value;
+  const classForm = document.getElementById('class').value.trim();
+  if(!somo || !mwalimu || !muda) return alert('Jaza somo, mwalimu, na muda');
 
-  if(somo === "" || mwalimu === "" || muda === "") return;
-
-  let item = {somo: somo, mwalimu: mwalimu, muda: muda};
-  RATIBA.push(item);
-  localStorage.setItem("ratiba", JSON.stringify(RATIBA));
-  displayItem(item,RATIBA.length-1);
-
-  // clear inputs
-  document.getElementById("somo").value = "";
-  document.getElementById("mwalimu").value = "";
-  document.getElementById("muda").value = "";
+  const item = {id: Date.now(), somo, mwalimu, muda, class: classForm};
+  schedule.push(item);
+  localStorage.setItem('schedule', JSON.stringify(schedule));
+  renderList();
+  document.getElementById('somo').value = '';
+  document.getElementById('mwalimu').value = '';
+  document.getElementById('muda').value = '';
+  document.getElementById('class').value = '';
+  scheduleNotification(item);
+  updateClassFilter();
 }
 
-// Display item in list with edit/delete
-function displayItem(item,index){
-  let li = document.createElement("li");
-  li.id = "item"+index;
-  li.textContent = item.somo + " - " + item.mwalimu + " - " + item.muda;
+// Render list
+function renderList(){
+  const ul = document.getElementById('scheduleList');
+  ul.innerHTML = '';
+  schedule.forEach(item=>{
+    const li = document.createElement('li');
+    li.innerHTML = `<strong>${item.somo} - ${item.mwalimu} - ${item.muda}${item.class? ' - '+item.class: ''}</strong>
+      <div class="actions">
+        <button onclick="editSomo(${item.id})">Edit</button>
+        <button onclick="deleteSomo(${item.id})">Delete</button>
+      </div>`;
+    ul.appendChild(li);
+  });
+}
 
-  // Edit button
-  let editBtn = document.createElement("button");
-  editBtn.textContent = "Edit";
-  editBtn.className = "editBtn";
-  editBtn.onclick = function(){
-    let newSomo = prompt("Somo:", item.somo);
-    let newMwalimu = prompt("Mwalimu:", item.mwalimu);
-    let newMuda = prompt("Muda (HH:mm):", item.muda);
-    if(newSomo && newMwalimu && newMuda){
-      item.somo = newSomo;
-      item.mwalimu = newMwalimu;
-      item.muda = newMuda;
-      RATIBA[index] = item;
-      localStorage.setItem("ratiba", JSON.stringify(RATIBA));
-      document.getElementById("item"+index).textContent = item.somo + " - " + item.mwalimu + " - " + item.muda;
-      document.getElementById("item"+index).appendChild(editBtn);
-      document.getElementById("item"+index).appendChild(deleteBtn);
+// Edit somo
+function editSomo(id){
+  const item = schedule.find(s=>s.id===id);
+  if(!item) return;
+  const newSomo = prompt('Somo:', item.somo);
+  const newMwalimu = prompt('Mwalimu:', item.mwalimu);
+  const newMuda = prompt('Muda (HH:MM):', item.muda);
+  const newClass = prompt('Darasa/Form:', item.class || '');
+  if(newSomo && newMwalimu && newMuda){
+    item.somo = newSomo;
+    item.mwalimu = newMwalimu;
+    item.muda = newMuda;
+    item.class = newClass;
+    localStorage.setItem('schedule', JSON.stringify(schedule));
+    renderList();
+    updateClassFilter();
+  }
+}
+
+// Delete somo
+function deleteSomo(id){
+  if(!confirm('Una uhakika?')) return;
+  schedule = schedule.filter(s=>s.id!==id);
+  localStorage.setItem('schedule', JSON.stringify(schedule));
+  renderList();
+  updateClassFilter();
+}
+
+// Filter/Search
+function filterList(){
+  const search = document.getElementById('search').value.toLowerCase();
+  const selectedClass = document.getElementById('filterClass').value;
+  const ul = document.getElementById('scheduleList');
+  ul.innerHTML = '';
+  schedule
+    .filter(item=>{
+      return (item.somo.toLowerCase().includes(search) || item.mwalimu.toLowerCase().includes(search))
+        && (selectedClass === '' || item.class === selectedClass);
+    })
+    .forEach(item=>{
+      const li = document.createElement('li');
+      li.innerHTML = `<strong>${item.somo} - ${item.mwalimu} - ${item.muda}${item.class? ' - '+item.class: ''}</strong>
+        <div class="actions">
+          <button onclick="editSomo(${item.id})">Edit</button>
+          <button onclick="deleteSomo(${item.id})">Delete</button>
+        </div>`;
+      ul.appendChild(li);
+    });
+}
+
+// Notifications
+function scheduleNotification(item){
+  if(!("Notification" in window)) return;
+  Notification.requestPermission().then(function(permission){
+    if(permission !== 'granted') return;
+    const now = new Date();
+    const [h, m] = item.muda.split(':').map(Number);
+    const notifyTime = new Date();
+    notifyTime.setHours(h); notifyTime.setMinutes(m); notifyTime.setSeconds(0);
+    const diff = notifyTime - now;
+    if(diff > 0){
+      setTimeout(()=>new Notification(`Somo ${item.somo}`, {body: `Muda wa somo na ${item.mwalimu} umefika!`}), diff);
     }
-  };
-
-  // Delete button
-  let deleteBtn = document.createElement("button");
-  deleteBtn.textContent = "Delete";
-  deleteBtn.className = "deleteBtn";
-  deleteBtn.onclick = function(){
-    RATIBA.splice(index,1);
-    localStorage.setItem("ratiba", JSON.stringify(RATIBA));
-    li.remove();
-    refreshList();
-  };
-
-  li.appendChild(editBtn);
-  li.appendChild(deleteBtn);
-  document.getElementById("ratiba").appendChild(li);
-}
-
-// Refresh list after delete
-function refreshList(){
-  document.getElementById("ratiba").innerHTML = "";
-  RATIBA.forEach(function(item,index){
-    displayItem(item,index);
   });
 }
 
-// Notification every minute
-setInterval(function(){
-  let now = new Date();
-  let hh = now.getHours().toString().padStart(2,'0');
-  let mm = now.getMinutes().toString().padStart(2,'0');
-  let currentTime = hh + ":" + mm;
+// Init
+renderList();
+updateClassFilter();
+schedule.forEach(scheduleNotification);
 
-  RATIBA.forEach(function(item){
-    if(item.muda === currentTime){
-      alert("Kipindi cha " + item.somo + " kinaanza sasa!");
-      document.getElementById("alarm").play();
-    }
-  });
-}, 60000); // check every minute
 </script>
-
 </body>
 </html>
