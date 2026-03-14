@@ -5,127 +5,514 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ratiba ya Vipindi – Nguliguli Secondary</title>
 <link rel="manifest" href="manifest.json">
+
 <style>
-body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }
-.notification { 
-  background-color: #1a73e8; color: #fff; font-weight: bold; 
-  padding: 10px; margin-bottom: 20px; overflow: hidden; position: relative; 
-  height: 30px;
+
+body{
+font-family:Arial;
+padding:20px;
+background:#f9f9f9;
 }
-.notification span { 
-  position: absolute; white-space: nowrap; 
-  animation: slideDown 10s linear infinite; 
+
+/* MENU */
+
+.menu-btn{
+font-size:28px;
+cursor:pointer;
+position:fixed;
+top:15px;
+left:15px;
 }
-@keyframes slideDown {
-  0% { top: -30px; }
-  50% { top: 0px; }
-  100% { top: -30px; }
+
+.sidebar{
+height:100%;
+width:0;
+position:fixed;
+top:0;
+left:0;
+background:#1a73e8;
+overflow-x:hidden;
+transition:0.3s;
+padding-top:60px;
+color:white;
 }
-header { text-align:center; margin-bottom:30px; }
-header h1 { color:#1a73e8; font-size:2.5em; margin:0; }
-header h2 { color:#555; font-size:1.5em; margin:5px 0; }
-header p { color:#777; margin:5px 0; font-size:1em; }
-h2.form-title { color:#1a73e8; margin-top:30px; }
-table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
-th, td { border: 1px solid #999; padding: 8px; text-align: left; }
-th { color: white; }
-select, input[type="time"] { width: 100%; box-sizing: border-box; padding: 4px; border: 1px solid #ccc; border-radius: 3px; }
-td select:focus, td input:focus { border-color: #1a73e8; outline: none; }
-/* Rangi za Form tofauti */
-.form1 th { background-color: #1a73e8; }
-.form1 td { background-color: #e8f0fe; }
-.form2 th { background-color: #d93025; }
-.form2 td { background-color: #fce8e6; }
-.form3 th { background-color: #188038; }
-.form3 td { background-color: #e6f4ea; }
-.form4 th { background-color: #f9ab00; }
-.form4 td { background-color: #fff4e5; }
+
+.sidebar a{
+padding:12px 20px;
+display:block;
+color:white;
+text-decoration:none;
+font-size:18px;
+}
+
+.sidebar a:hover{
+background:#1557b0;
+}
+
+.closebtn{
+position:absolute;
+top:10px;
+right:20px;
+font-size:30px;
+cursor:pointer;
+}
+
+/* OFFICE */
+
+.office{
+display:none;
+background:white;
+padding:20px;
+border-radius:6px;
+box-shadow:0 0 10px rgba(0,0,0,0.2);
+margin-bottom:20px;
+}
+
+textarea{
+width:100%;
+height:120px;
+margin-top:10px;
+}
+
+input[type=file]{
+margin-top:10px;
+}
+
+button{
+margin-top:15px;
+padding:10px 15px;
+background:#1a73e8;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+/* HEADER */
+
+header{
+text-align:center;
+margin-bottom:30px;
+}
+
+header h1{
+color:#1a73e8;
+font-size:2.5em;
+}
+
+header h2{
+color:#555;
+}
+
+/* BELL */
+
+#bellNotice{
+display:none;
+position:fixed;
+top:20px;
+right:20px;
+background:#ffcc00;
+padding:15px;
+border-radius:6px;
+font-weight:bold;
+box-shadow:0 0 10px rgba(0,0,0,0.3);
+}
+
+/* TABLE */
+
+table{
+border-collapse:collapse;
+width:100%;
+margin-bottom:30px;
+}
+
+th,td{
+border:1px solid #999;
+padding:8px;
+}
+
+th{
+color:white;
+}
+
+select,input{
+width:100%;
+padding:4px;
+}
+
+/* FORM COLORS */
+
+.form1 th{background:#1a73e8;}
+.form1 td{background:#e8f0fe;}
+
+.form2 th{background:#d93025;}
+.form2 td{background:#fce8e6;}
+
+.form3 th{background:#188038;}
+.form3 td{background:#e6f4ea;}
+
+.form4 th{background:#f9ab00;}
+.form4 td{background:#fff4e5;}
+
 </style>
 </head>
+
 <body>
 
-<div class="notification">
-  <span>Kipindi kimeanza – Tafadhali chagua somo, mwalimu, na muda kila kipindi</span>
+<span class="menu-btn" onclick="openMenu()">☰</span>
+
+<div id="menu" class="sidebar">
+
+<span class="closebtn" onclick="closeMenu()">×</span>
+
+<a onclick="showOffice('head')">Office ya Mkuu wa Shule</a>
+<a onclick="showOffice('academic')">Office ya Academic</a>
+<a onclick="showOffice('sports')">Office ya Michezo</a>
+<a onclick="showOffice('discipline')">Office ya Nidhamu</a>
+
 </div>
+
+<div id="bellNotice">🔔 Kipindi Kimeanza</div>
 
 <header>
 <h1>Nguliguli Secondary School</h1>
-<h2>Ratiba ya Vipindi – Form 1 hadi 4</h2>
-<p>Tafadhali chagua mwalimu na muda kila kipindi</p>
+<h2>Ratiba ya Vipindi</h2>
+<p>Form One hadi Form Four</p>
 </header>
 
+<!-- OFFICES -->
+
+<div id="head" class="office">
+<h3>Office ya Mkuu wa Shule</h3>
+<textarea placeholder="Andika tangazo"></textarea>
+<br>
+Upload PDF:
+<input type="file" accept="application/pdf">
+<br>
+<button onclick="closeOffice()">Back</button>
+</div>
+
+<div id="academic" class="office">
+
+<h3>Office ya Academic</h3>
+
+<textarea placeholder="Andika tangazo"></textarea>
+
+<br>
+
+Upload PDF:
+<input type="file" accept="application/pdf">
+
+<h3>Report ya Masomo</h3>
+
+<button onclick="generateReport()">Angalia Report</button>
+
+<table id="reportTable">
+<tr>
+<th>Somo</th>
+<th>Jumla ya Wanafunzi</th>
+</tr>
+</table>
+
+<br>
+<button onclick="closeOffice()">Back</button>
+
+</div>
+
+<div id="sports" class="office">
+<h3>Office ya Michezo</h3>
+<textarea placeholder="Andika tangazo"></textarea>
+<br>
+Upload PDF:
+<input type="file" accept="application/pdf">
+<br>
+<button onclick="closeOffice()">Back</button>
+</div>
+
+<div id="discipline" class="office">
+<h3>Office ya Nidhamu</h3>
+<textarea placeholder="Andika tangazo"></textarea>
+<br>
+Upload PDF:
+<input type="file" accept="application/pdf">
+<br>
+<button onclick="closeOffice()">Back</button>
+</div>
+
 <script>
-// Majina ya walimu halisi
-const walimu = [
-"Denis Maige","Damiani Lushinge","Omari Mniru","Mario Maketa","Method Maginga",
-"Samwel Msabila","Mwansiti Mbwana","Agness Tarence","Joyce Makoli",
-"Nicholous Godfrey","Petro Benjamin","Kinunda Godfrid","Baraka John","New Teacher"
-];
 
-// Masomo halisi
-const masomo = [
-"Leadership","Administration","Physics","History","Biology","Mathematics",
-"Business Studies","Chemistry","English Language","English Literature","Civics"
-];
+/* MENU */
 
-// Generate dropdown function
-function generateDropdown(options, placeholder) {
-  let dropdown = `<select><option value="">${placeholder}</option>`;
-  options.forEach(opt => { dropdown += `<option value="${opt}">${opt}</option>`; });
-  dropdown += '</select>';
-  return dropdown;
+function openMenu(){
+document.getElementById("menu").style.width="250px";
 }
 
-// Add dropdowns to each table cell
-function addDropdowns() {
-  document.querySelectorAll('td.subject').forEach(td => td.innerHTML = generateDropdown(masomo,"Chagua somo"));
-  document.querySelectorAll('td.teacher').forEach(td => td.innerHTML = generateDropdown(walimu,"Chagua mwalimu"));
+function closeMenu(){
+document.getElementById("menu").style.width="0";
 }
 
-window.onload = addDropdowns;
+/* OFFICE */
 
-// Generate timetable table
-function generateTimetable(formName, schedule, formClass) {
-  document.write(`<h2 class="form-title">${formName}</h2><table class="${formClass}">
-  <tr>
-    <th>Siku</th>
-    <th>Kipindi</th>
-    <th>Somo</th>
-    <th>Muda</th>
-    <th>Mwalimu</th>
-  </tr>`);
+function showOffice(id){
 
-  schedule.forEach(day => {
-    const rowspan = day.periods.length;
-    day.periods.forEach((period,index)=>{
-      document.write('<tr>');
-      if(index===0){ document.write(`<td rowspan="${rowspan}">${day.siku}</td>`); }
-      document.write(`<td>${period.kipindi}</td>`);
-      document.write('<td class="subject"></td>');
-      document.write(`<td><input type="time" value="${period.muda}"></td>`);
-      document.write('<td class="teacher"></td>');
-      document.write('</tr>');
-    });
-  });
-  document.write('</table>');
+document.querySelectorAll('.office').forEach(o=>{
+o.style.display="none";
+});
+
+document.getElementById(id).style.display="block";
+
+window.scrollTo(0,0);
+
 }
 
-// Vipindi 4 kwa siku template
-const formScheduleTemplate = [
-{siku:"Jumatatu", periods:[{kipindi:1,muda:"08:00"},{kipindi:2,muda:"08:45"},{kipindi:3,muda:"09:30"},{kipindi:4,muda:"10:15"}]},
-{siku:"Jumanne", periods:[{kipindi:1,muda:"08:00"},{kipindi:2,muda:"08:45"},{kipindi:3,muda:"09:30"},{kipindi:4,muda:"10:15"}]},
-{siku:"Jumatano", periods:[{kipindi:1,muda:"08:00"},{kipindi:2,muda:"08:45"},{kipindi:3,muda:"09:30"},{kipindi:4,muda:"10:15"}]},
-{siku:"Alhamisi", periods:[{kipindi:1,muda:"08:00"},{kipindi:2,muda:"08:45"},{kipindi:3,muda:"09:30"},{kipindi:4,muda:"10:15"}]},
-{siku:"Ijumaa", periods:[{kipindi:1,muda:"08:00"},{kipindi:2,muda:"08:45"},{kipindi:3,muda:"09:30"},{kipindi:4,muda:"10:15"}]}
+function closeOffice(){
+
+document.querySelectorAll('.office').forEach(o=>{
+o.style.display="none";
+});
+
+}
+
+/* WALIMU */
+
+const walimu=[
+"Denis Maige",
+"Damiani Lushinge",
+"Omari Mniru",
+"Mario Maketa",
+"Method Maginga",
+"Samwel Msabila",
+"Mwansiti Mbwana",
+"Agness Tarence",
+"Joyce Makoli",
+"Nicholous Godfrey",
+"Petro Benjamin",
+"Kinunda Godfrid",
+"Baraka John"
 ];
 
-// Generate tables for Form 1–4 with different colors
-generateTimetable("Form 1", formScheduleTemplate, "form1");
-generateTimetable("Form 2", formScheduleTemplate, "form2");
-generateTimetable("Form 3", formScheduleTemplate, "form3");
-generateTimetable("Form 4", formScheduleTemplate, "form4");
+/* MASOMO */
+
+const masomo=[
+"Physics",
+"History",
+"Biology",
+"Mathematics",
+"Business Studies",
+"Chemistry",
+"English Language",
+"English Literature",
+"Civics",
+"Geography",
+"Kiswahili"
+];
+
+/* DROPDOWN */
+
+function dropdown(list,title){
+
+let html=`<select><option>${title}</option>`;
+
+list.forEach(i=>{
+html+=`<option>${i}</option>`;
+});
+
+html+="</select>";
+
+return html;
+
+}
+
+function addDropdowns(){
+
+document.querySelectorAll('.subject').forEach(td=>{
+td.innerHTML=dropdown(masomo,"Chagua Somo");
+});
+
+document.querySelectorAll('.teacher').forEach(td=>{
+td.innerHTML=dropdown(walimu,"Chagua Mwalimu");
+});
+
+}
+
+window.onload=addDropdowns;
+
+/* AUTO BELL */
+
+function checkBell(){
+
+let now=new Date();
+
+let current=
+now.getHours().toString().padStart(2,'0')+
+":"+
+now.getMinutes().toString().padStart(2,'0');
+
+document.querySelectorAll('input[type="time"]').forEach(t=>{
+
+if(t.value===current){
+
+let bell=document.getElementById("bellNotice");
+
+bell.style.display="block";
+
+let audio=new Audio("https://actions.google.com/sounds/v1/alarms/school_bell.ogg");
+
+audio.play();
+
+setTimeout(()=>{
+bell.style.display="none";
+},10000);
+
+}
+
+});
+
+}
+
+setInterval(checkBell,60000);
+
+/* REPORT ACADEMIC */
+
+function generateReport(){
+
+let subjects={};
+
+document.querySelectorAll("table").forEach(table=>{
+
+table.querySelectorAll("tr").forEach(row=>{
+
+let subject=row.querySelector(".subject select");
+
+let students=row.querySelector("input[type=number]");
+
+if(subject && students){
+
+let sub=subject.value;
+
+let num=parseInt(students.value)||0;
+
+if(sub && sub!="Chagua Somo"){
+
+if(!subjects[sub]){
+subjects[sub]=0;
+}
+
+subjects[sub]+=num;
+
+}
+
+}
+
+});
+
+});
+
+let table=document.getElementById("reportTable");
+
+table.innerHTML="<tr><th>Somo</th><th>Jumla ya Wanafunzi</th></tr>";
+
+for(let s in subjects){
+
+table.innerHTML+=`
+<tr>
+<td>${s}</td>
+<td>${subjects[s]}</td>
+</tr>
+`;
+
+}
+
+}
+
+/* RATIBA */
+
+function generate(formName,schedule,style){
+
+document.write(`<h2>${formName}</h2>
+
+<table class="${style}">
+
+<tr>
+<th>Siku</th>
+<th>Kipindi</th>
+<th>Somo</th>
+<th>Muda</th>
+<th>Mwalimu</th>
+<th>Idadi ya Wanafunzi</th>
+</tr>`);
+
+schedule.forEach(day=>{
+
+let rowspan=day.periods.length;
+
+day.periods.forEach((p,i)=>{
+
+document.write("<tr>");
+
+if(i==0){
+document.write(`<td rowspan="${rowspan}">${day.siku}</td>`);
+}
+
+document.write(`<td>${p.kipindi}</td>`);
+
+document.write(`<td class="subject"></td>`);
+
+document.write(`<td><input type="time" value="${p.muda}"></td>`);
+
+document.write(`<td class="teacher"></td>`);
+
+document.write(`<td><input type="number"></td>`);
+
+document.write("</tr>");
+
+});
+
+});
+
+document.write("</table>");
+
+}
+
+const schedule=[
+
+{siku:"Jumatatu",periods:[
+{kipindi:1,muda:"08:00"},
+{kipindi:2,muda:"08:45"},
+{kipindi:3,muda:"09:30"},
+{kipindi:4,muda:"10:15"}]},
+
+{siku:"Jumanne",periods:[
+{kipindi:1,muda:"08:00"},
+{kipindi:2,muda:"08:45"},
+{kipindi:3,muda:"09:30"},
+{kipindi:4,muda:"10:15"}]},
+
+{siku:"Jumatano",periods:[
+{kipindi:1,muda:"08:00"},
+{kipindi:2,muda:"08:45"},
+{kipindi:3,muda:"09:30"},
+{kipindi:4,muda:"10:15"}]},
+
+{siku:"Alhamisi",periods:[
+{kipindi:1,muda:"08:00"},
+{kipindi:2,muda:"08:45"},
+{kipindi:3,muda:"09:30"},
+{kipindi:4,muda:"10:15"}]},
+
+{siku:"Ijumaa",periods:[
+{kipindi:1,muda:"08:00"},
+{kipindi:2,muda:"08:45"},
+{kipindi:3,muda:"09:30"},
+{kipindi:4,muda:"10:15"}]}
+
+];
+
+generate("Form One",schedule,"form1");
+generate("Form Two",schedule,"form2");
+generate("Form Three",schedule,"form3");
+generate("Form Four",schedule,"form4");
 
 </script>
 
 </body>
-</html>
+                                      </html>
