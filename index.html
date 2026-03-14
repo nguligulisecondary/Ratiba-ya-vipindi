@@ -8,240 +8,232 @@
 
 <style>
 body{
-font-family:Arial;
-padding:20px;
-background:#f4f6fb;
+  font-family:Arial,sans-serif;
+  padding:0;
+  margin:0;
+  background:#f4f6fb;
 }
 
 /* HEADER */
 header{
-text-align:center;
-margin-bottom:30px;
-background:linear-gradient(90deg,#1a73e8,#0b4db8);
-color:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,0.2);
-display:flex;
-justify-content:space-between;
-align-items:center;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  background:linear-gradient(90deg,#1a73e8,#0b4db8);
+  color:white;
+  padding:15px 10px;
+  border-radius:0 0 10px 10px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
 }
 
 header .header-left{
-text-align:center;
-flex:1;
+  flex:1 1 70%;
+  text-align:center;
 }
 
 header h1{
-margin:0;
-font-size:28px;
-text-transform:uppercase;
-letter-spacing:2px;
+  margin:0;
+  font-size:4vw; /* responsive size */
+  text-transform:uppercase;
+  letter-spacing:2px;
 }
 
 header h2{
-margin:5px;
-font-weight:normal;
-text-transform:uppercase;
+  margin:5px;
+  font-weight:normal;
+  font-size:3vw;
+  text-transform:uppercase;
 }
 
 header p{
-text-transform:uppercase;
+  text-transform:uppercase;
+  font-size:2.5vw;
 }
 
 /* LANGUAGE BUTTON */
 #langBtn{
-padding:5px 10px;
-font-weight:bold;
-border:none;
-border-radius:4px;
-cursor:pointer;
-background:white;
-color:#1a73e8;
+  padding:5px 10px;
+  font-weight:bold;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+  background:white;
+  color:#1a73e8;
+  font-size:3vw;
 }
 
-/* MENU */
-
+/* DASH / MENU */
 .menu-btn{
-font-size:28px;
-cursor:pointer;
-position:fixed;
-top:15px;
-left:15px;
-color:white;
+  font-size:28px;
+  cursor:pointer;
+  color:white;
+  margin-right:10px;
 }
 
+/* SIDEBAR */
 .sidebar{
-height:100%;
-width:0;
-position:fixed;
-top:0;
-left:0;
-background:#1a73e8;
-overflow-x:hidden;
-transition:0.3s;
-padding-top:60px;
+  height:100%;
+  width:0;
+  position:fixed;
+  top:0;
+  left:0;
+  background:#1a73e8;
+  overflow-x:hidden;
+  transition:0.3s;
+  padding-top:60px;
+  z-index:1000;
 }
 
 .sidebar a{
-padding:12px 20px;
-display:block;
-color:white;
-text-decoration:none;
-font-size:18px;
+  padding:12px 20px;
+  display:block;
+  color:white;
+  text-decoration:none;
+  font-size:18px;
 }
 
 .sidebar a:hover{
-background:#0b4db8;
+  background:#0b4db8;
 }
 
 .closebtn{
-position:absolute;
-top:10px;
-right:20px;
-font-size:30px;
-color:white;
-cursor:pointer;
+  position:absolute;
+  top:10px;
+  right:20px;
+  font-size:30px;
+  color:white;
+  cursor:pointer;
 }
 
-/* OFFICE */
-
+/* OFFICES */
 .office{
-display:none;
-background:white;
-padding:20px;
-border-radius:6px;
-box-shadow:0 0 10px rgba(0,0,0,0.2);
-margin-bottom:20px;
+  display:none;
+  background:white;
+  padding:20px;
+  border-radius:6px;
+  box-shadow:0 0 10px rgba(0,0,0,0.2);
+  margin-bottom:20px;
 }
 
-textarea{
-width:100%;
-height:120px;
-margin-top:10px;
+textarea, input[type=file]{
+  width:100%;
+  margin-top:10px;
 }
 
 button{
-margin-top:10px;
-padding:10px 15px;
-background:#1a73e8;
-color:white;
-border:none;
-cursor:pointer;
-}
-
-/* BELL */
-
-#bellNotice{
-display:none;
-position:fixed;
-top:20px;
-right:20px;
-background:#ffcc00;
-padding:15px;
-border-radius:6px;
-font-weight:bold;
+  margin-top:10px;
+  padding:10px 15px;
+  background:#1a73e8;
+  color:white;
+  border:none;
+  cursor:pointer;
 }
 
 /* TABLE */
-
 table{
-border-collapse:collapse;
-width:100%;
-margin-bottom:30px;
+  border-collapse:collapse;
+  width:100%;
+  margin-bottom:30px;
 }
 
 th,td{
-border:1px solid #999;
-padding:8px;
+  border:1px solid #999;
+  padding:8px;
 }
 
 th{
-color:white;
+  color:white;
 }
 
 select,input{
-width:100%;
-padding:4px;
+  width:100%;
+  padding:4px;
 }
 
 /* FORM COLORS */
-
 .form1 th{background:#1a73e8;}
 .form1 td{background:#e8f0fe;}
-
 .form2 th{background:#d93025;}
 .form2 td{background:#fce8e6;}
-
 .form3 th{background:#188038;}
 .form3 td{background:#e6f4ea;}
-
 .form4 th{background:#f9ab00;}
 .form4 td{background:#fff4e5;}
 
+/* NOTIFICATION */
+.notification{
+  background-color:#1a73e8;
+  color:#fff;
+  font-weight:bold;
+  padding:10px;
+  margin:10px;
+  border-radius:6px;
+  text-align:center;
+}
 </style>
 </head>
 
 <body>
 
-<span class="menu-btn" onclick="openMenu()">☰</span>
-
-<div id="menu" class="sidebar">
-
-<span class="closebtn" onclick="closeMenu()">×</span>
-
-<a onclick="showOffice('head')">Office ya Mkuu wa Shule</a>
-<a onclick="showOffice('academic')">Office ya Academic</a>
-<a onclick="showOffice('sports')">Office ya Michezo</a>
-<a onclick="showOffice('discipline')">Office ya Nidhamu</a>
-
-</div>
-
-<div id="bellNotice">🔔 Kipindi Kimeanza</div>
-
-<!-- HEADER WITH LANGUAGE SWITCH -->
+<!-- DASH + LANGUAGE -->
 <header>
+<div style="display:flex; align-items:center; gap:10px;">
+<span class="menu-btn" onclick="openMenu()">☰</span>
 <div class="header-left">
 <h1>Nguliguli Secondary School</h1>
 <h2>Ratiba ya Vipindi</h2>
 <p id="headerForm">Form One hadi Form Four</p>
+</div>
 </div>
 <div>
 <button id="langBtn" onclick="toggleLanguage()">SW</button>
 </div>
 </header>
 
-<!-- OFFICES -->
+<div class="notification" id="notificationText">
+Kipindi kimeanza – Tafadhali chagua somo, mwalimu, na muda kila kipindi
+</div>
 
+<!-- SIDEBAR -->
+<div id="menu" class="sidebar">
+<span class="closebtn" onclick="closeMenu()">×</span>
+<a onclick="showOffice('head')">Office ya Mkuu wa Shule</a>
+<a onclick="showOffice('academic')">Office ya Academic</a>
+<a onclick="showOffice('sports')">Office ya Michezo</a>
+<a onclick="showOffice('discipline')">Office ya Nidhamu</a>
+<hr style="border:1px solid #fff; margin:10px 0;">
+<h3 style="color:white; margin-left:20px;">Settings</h3>
+<a>General Settings</a>
+<a>Language</a>
+<a>Notifications</a>
+<a onclick="resetData()">Reset Data</a>
+</div>
+
+<div id="bellNotice">🔔 Kipindi Kimeanza</div>
+
+<!-- OFFICES -->
 <div id="head" class="office">
 <h3>Office ya Mkuu wa Shule</h3>
 <textarea placeholder="Andika tangazo"></textarea>
-<br>
 <input type="file" accept="application/pdf">
 <br>
 <button onclick="closeOffice()">Back</button>
 </div>
 
 <div id="academic" class="office">
-
 <h3>Office ya Academic</h3>
-
 <textarea placeholder="Andika tangazo"></textarea>
-<br>
 <input type="file" accept="application/pdf">
-
 <h3>Report ya Masomo</h3>
 <button onclick="generateReport()">Angalia Report</button>
-
 <table id="reportTable">
 <tr>
 <th>Somo</th>
 <th>Jumla ya Wanafunzi</th>
 </tr>
 </table>
-
 <button onclick="closeOffice()">Back</button>
-
 </div>
 
 <div id="sports" class="office">
@@ -261,27 +253,16 @@ padding:4px;
 </div>
 
 <script>
-
 /* MENU */
-
-function openMenu(){
-document.getElementById("menu").style.width="250px";
-}
-
-function closeMenu(){
-document.getElementById("menu").style.width="0";
-}
+function openMenu(){document.getElementById("menu").style.width="250px";}
+function closeMenu(){document.getElementById("menu").style.width="0";}
 
 /* OFFICE */
-
 function showOffice(id){
 document.querySelectorAll('.office').forEach(o=>o.style.display="none");
 document.getElementById(id).style.display="block";
 }
-
-function closeOffice(){
-document.querySelectorAll('.office').forEach(o=>o.style.display="none");
-}
+function closeOffice(){document.querySelectorAll('.office').forEach(o=>o.style.display="none");}
 
 /* LANGUAGE SWITCH */
 let lang='sw';
@@ -299,8 +280,10 @@ document.getElementById('headerForm').innerText="Form One hadi Form Four";
 }
 }
 
-/* WALIMU */
+/* RESET DATA */
+function resetData(){localStorage.removeItem('ratiba'); location.reload();}
 
+/* WALIMU */
 const walimu=[
 "Denis Maige","Damiani Lushinge","Omari Mniru","Mario Maketa",
 "Method Maginga","Samwel Msabila","Mwansiti Mbwana",
@@ -309,177 +292,93 @@ const walimu=[
 ];
 
 /* MASOMO */
-
 const masomo=[
 "Physics","History","Biology","Mathematics","Business Studies",
 "Chemistry","English Language","English Literature",
 "Civics","Geography","Kiswahili"
 ];
 
-/* LOCAL STORAGE SAVE */
-
+/* LOCAL STORAGE */
 function saveData(){
-
 let data=[];
-
 document.querySelectorAll("table tr").forEach(row=>{
-
 let subject=row.querySelector(".subject select");
 let teacher=row.querySelector(".teacher select");
 let time=row.querySelector("input[type=time]");
 let students=row.querySelector("input[type=number]");
-
-if(subject){
-
-data.push({
-subject:subject.value,
-teacher:teacher.value,
-time:time.value,
-students:students.value
+if(subject){data.push({subject:subject.value,teacher:teacher.value,time:time.value,students:students.value});}
 });
-
-}
-
-});
-
 localStorage.setItem("ratiba",JSON.stringify(data));
-
 }
-
-/* LOAD DATA */
 
 function loadData(){
-
 let data=JSON.parse(localStorage.getItem("ratiba")||"[]");
-
 let i=0;
-
 document.querySelectorAll("table tr").forEach(row=>{
-
 let subject=row.querySelector(".subject select");
 let teacher=row.querySelector(".teacher select");
 let time=row.querySelector("input[type=time]");
 let students=row.querySelector("input[type=number]");
-
 if(subject && data[i]){
-
 subject.value=data[i].subject;
 teacher.value=data[i].teacher;
 time.value=data[i].time;
 students.value=data[i].students;
-
 i++;
-
 }
-
 });
-
 }
 
 /* DROPDOWN */
-
 function dropdown(list,title){
-
 let html=`<select onchange="saveData()"><option>${title}</option>`;
-
 list.forEach(i=>html+=`<option>${i}</option>`);
-
 html+="</select>";
-
 return html;
-
 }
-
 function addDropdowns(){
-
-document.querySelectorAll('.subject').forEach(td=>{
-td.innerHTML=dropdown(masomo,"Chagua Somo");
-});
-
-document.querySelectorAll('.teacher').forEach(td=>{
-td.innerHTML=dropdown(walimu,"Chagua Mwalimu");
-});
-
+document.querySelectorAll('.subject').forEach(td=>{td.innerHTML=dropdown(masomo,"Chagua Somo");});
+document.querySelectorAll('.teacher').forEach(td=>{td.innerHTML=dropdown(walimu,"Chagua Mwalimu");});
 }
 
 /* AUTO BELL */
-
 function checkBell(){
-
 let now=new Date();
-
-let current=
-now.getHours().toString().padStart(2,'0')+
-":"+
-now.getMinutes().toString().padStart(2,'0');
-
+let current=now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0');
 document.querySelectorAll('input[type="time"]').forEach(t=>{
-
 if(t.value===current){
-
 let bell=document.getElementById("bellNotice");
-
 bell.style.display="block";
-
 let audio=new Audio("https://actions.google.com/sounds/v1/alarms/school_bell.ogg");
-
 audio.play();
-
 setTimeout(()=>bell.style.display="none",10000);
-
 }
-
 });
-
 }
-
 setInterval(checkBell,60000);
 
 /* REPORT */
-
 function generateReport(){
-
 let subjects={};
-
 document.querySelectorAll("table tr").forEach(row=>{
-
 let subject=row.querySelector(".subject select");
 let students=row.querySelector("input[type=number]");
-
 if(subject && students){
-
 let sub=subject.value;
-
 let num=parseInt(students.value)||0;
-
 if(sub && sub!="Chagua Somo"){
-
 if(!subjects[sub])subjects[sub]=0;
-
 subjects[sub]+=num;
-
 }
-
 }
-
 });
-
 let table=document.getElementById("reportTable");
-
 table.innerHTML="<tr><th>Somo</th><th>Jumla ya Wanafunzi</th></tr>";
-
-for(let s in subjects){
-
-table.innerHTML+=`<tr><td>${s}</td><td>${subjects[s]}</td></tr>`;
-
-}
-
+for(let s in subjects){table.innerHTML+=`<tr><td>${s}</td><td>${subjects[s]}</td></tr>`;}
 }
 
 /* RATIBA */
-
 function generate(formName,schedule,style){
-
 document.write(`<h2>${formName}</h2>
 <table class="${style}">
 <tr>
@@ -490,41 +389,28 @@ document.write(`<h2>${formName}</h2>
 <th>Mwalimu</th>
 <th>Idadi ya Wanafunzi</th>
 </tr>`);
-
 schedule.forEach(day=>{
-
 let rowspan=day.periods.length;
-
 day.periods.forEach((p,i)=>{
-
 document.write("<tr>");
-
 if(i==0)document.write(`<td rowspan="${rowspan}">${day.siku}</td>`);
-
 document.write(`<td>${p.kipindi}</td>`);
 document.write(`<td class="subject"></td>`);
 document.write(`<td><input type="time" value="${p.muda}" onchange="saveData()"></td>`);
 document.write(`<td class="teacher"></td>`);
 document.write(`<td><input type="number" onchange="saveData()"></td>`);
-
 document.write("</tr>");
-
 });
-
 });
-
 document.write("</table>");
-
 }
 
 const schedule=[
-
 {siku:"Jumatatu",periods:[{kipindi:1,muda:"08:00"},{kipindi:2,muda:"08:45"},{kipindi:3,muda:"09:30"},{kipindi:4,muda:"10:15"}]},
 {siku:"Jumanne",periods:[{kipindi:1,muda:"08:00"},{kipindi:2,muda:"08:45"},{kipindi:3,muda:"09:30"},{kipindi:4,muda:"10:15"}]},
 {siku:"Jumatano",periods:[{kipindi:1,muda:"08:00"},{kipindi:2,muda:"08:45"},{kipindi:3,muda:"09:30"},{kipindi:4,muda:"10:15"}]},
 {siku:"Alhamisi",periods:[{kipindi:1,muda:"08:00"},{kipindi:2,muda:"08:45"},{kipindi:3,muda:"09:30"},{kipindi:4,muda:"10:15"}]},
 {siku:"Ijumaa",periods:[{kipindi:1,muda:"08:00"},{kipindi:2,muda:"08:45"},{kipindi:3,muda:"09:30"},{kipindi:4,muda:"10:15"}]}
-
 ];
 
 generate("Form One",schedule,"form1");
@@ -533,10 +419,9 @@ generate("Form Three",schedule,"form3");
 generate("Form Four",schedule,"form4");
 
 setTimeout(loadData,500);
-
 addDropdowns();
 
 </script>
 
 </body>
-</html>
+  </html>
