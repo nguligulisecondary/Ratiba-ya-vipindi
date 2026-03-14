@@ -5,179 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ratiba ya Vipindi – Nguliguli Secondary</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1a73e8">
-
 <style>
-body{
-  font-family:Arial,sans-serif;
-  padding:0;
-  margin:0;
-  background:#f4f6fb;
-}
-
-/* HEADER */
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-  background:linear-gradient(90deg,#1a73e8,#0b4db8);
-  color:white;
-  padding:15px 10px;
-  border-radius:0 0 10px 10px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.2);
-}
-
-header .header-left{
-  flex:1 1 70%;
-  text-align:center;
-}
-
-header h1{
-  margin:0;
-  font-size:4vw;
-  text-transform:uppercase;
-  letter-spacing:2px;
-}
-
-header h2{
-  margin:5px;
-  font-weight:normal;
-  font-size:3vw;
-  text-transform:uppercase;
-}
-
-header p{
-  text-transform:uppercase;
-  font-size:2.5vw;
-}
-
-/* LANGUAGE BUTTON */
-#langBtn{
-  padding:5px 10px;
-  font-weight:bold;
-  border:none;
-  border-radius:4px;
-  cursor:pointer;
-  background:white;
-  color:#1a73e8;
-  font-size:3vw;
-}
-
-/* DASH / MENU */
-.menu-btn{
-  font-size:28px;
-  cursor:pointer;
-  color:white;
-  margin-right:10px;
-}
-
-/* SIDEBAR */
-.sidebar{
-  height:100%;
-  width:0;
-  position:fixed;
-  top:0;
-  left:0;
-  background:#1a73e8;
-  overflow-x:hidden;
-  transition:0.3s;
-  padding-top:60px;
-  z-index:1000;
-}
-
-.sidebar a{
-  padding:12px 20px;
-  display:block;
-  color:white;
-  text-decoration:none;
-  font-size:18px;
-}
-
-.sidebar a:hover{
-  background:#0b4db8;
-}
-
-.closebtn{
-  position:absolute;
-  top:10px;
-  right:20px;
-  font-size:30px;
-  color:white;
-  cursor:pointer;
-}
-
-/* OFFICES */
-.office{
-  display:none;
-  background:white;
-  padding:20px;
-  border-radius:6px;
-  box-shadow:0 0 10px rgba(0,0,0,0.2);
-  margin-bottom:20px;
-}
-
-textarea, input[type=file]{
-  width:100%;
-  margin-top:10px;
-}
-
-button{
-  margin-top:10px;
-  padding:10px 15px;
-  background:#1a73e8;
-  color:white;
-  border:none;
-  cursor:pointer;
-}
-
-/* TABLE */
-table{
-  border-collapse:collapse;
-  width:100%;
-  margin-bottom:30px;
-}
-
-th,td{
-  border:1px solid #999;
-  padding:8px;
-}
-
-th{
-  color:white;
-}
-
-select,input{
-  width:100%;
-  padding:4px;
-}
-
-/* FORM COLORS */
-.form1 th{background:#1a73e8;}
-.form1 td{background:#e8f0fe;}
-.form2 th{background:#d93025;}
-.form2 td{background:#fce8e6;}
-.form3 th{background:#188038;}
-.form3 td{background:#e6f4ea;}
-.form4 th{background:#f9ab00;}
-.form4 td{background:#fff4e5;}
-
-/* NOTIFICATION */
-.notification{
-  background-color:#1a73e8;
-  color:#fff;
-  font-weight:bold;
-  padding:10px;
-  margin:10px;
-  border-radius:6px;
-  text-align:center;
-}
+body{font-family:Arial,sans-serif;padding:0;margin:0;background:#f4f6fb;}
+header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;background:linear-gradient(90deg,#1a73e8,#0b4db8);color:white;padding:15px 10px;border-radius:0 0 10px 10px;box-shadow:0 5px 15px rgba(0,0,0,0.2);}
+header .header-left{flex:1 1 70%;text-align:center;}
+header h1{margin:0;font-size:4vw;text-transform:uppercase;letter-spacing:2px;}
+header h2{margin:5px;font-weight:normal;font-size:3vw;text-transform:uppercase;}
+header p{font-size:2.5vw;text-transform:uppercase;}
+#langBtn{padding:5px 10px;font-weight:bold;border:none;border-radius:4px;cursor:pointer;background:white;color:#1a73e8;font-size:3vw;}
+.menu-btn{font-size:28px;cursor:pointer;color:white;margin-right:10px;}
+.sidebar{height:100%;width:0;position:fixed;top:0;left:0;background:#1a73e8;overflow-x:hidden;transition:0.3s;padding-top:60px;z-index:1000;}
+.sidebar a{padding:12px 20px;display:block;color:white;text-decoration:none;font-size:18px;}
+.sidebar a:hover{background:#0b4db8;}
+.closebtn{position:absolute;top:10px;right:20px;font-size:30px;color:white;cursor:pointer;}
+.office{display:none;background:white;padding:20px;border-radius:6px;box-shadow:0 0 10px rgba(0,0,0,0.2);margin-bottom:20px;}
+textarea,input[type=file]{width:100%;margin-top:10px;}
+button{margin-top:10px;padding:10px 15px;background:#1a73e8;color:white;border:none;cursor:pointer;}
+table{border-collapse:collapse;width:100%;margin-bottom:30px;}
+th,td{border:1px solid #999;padding:8px;}
+th{color:white;}
+select,input{width:100%;padding:4px;}
+.form1 th{background:#1a73e8;} .form1 td{background:#e8f0fe;}
+.form2 th{background:#d93025;} .form2 td{background:#fce8e6;}
+.form3 th{background:#188038;} .form3 td{background:#e6f4ea;}
+.form4 th{background:#f9ab00;} .form4 td{background:#fff4e5;}
+.notification{background-color:#1a73e8;color:#fff;font-weight:bold;padding:10px;margin:10px;border-radius:6px;text-align:center;}
 </style>
 </head>
 
 <body>
 
-<!-- DASH + LANGUAGE -->
 <header>
 <div style="display:flex; align-items:center; gap:10px;">
 <span class="menu-btn" onclick="openMenu()">☰</span>
@@ -253,18 +110,7 @@ Kipindi kimeanza – Tafadhali chagua somo, mwalimu, na muda kila kipindi
 <button onclick="closeOffice()">Back</button>
 </div>
 
-<!-- CHAGUA KIPINDI -->
-<h3>Chagua Kipindi</h3>
-
-<select id="periodSelect" onchange="addPeriod()">
-<option value="">Chagua Kipindi</option>
-<option value="1">Kipindi cha Kwanza</option>
-<option value="2">Kipindi cha Pili</option>
-<option value="3">Kipindi cha Tatu</option>
-<option value="4">Kipindi cha Nne</option>
-<option value="5">Kipindi cha Tano</option>
-</select>
-
+<!-- ====== TABLE YA VIPINDI ILIYOBAKIA VILE VILE ====== -->
 <table id="periodTable" class="form1">
 <tr>
 <th>Kipindi</th>
@@ -273,154 +119,17 @@ Kipindi kimeanza – Tafadhali chagua somo, mwalimu, na muda kila kipindi
 <th>Mwalimu</th>
 <th>Idadi ya Wanafunzi</th>
 </tr>
-</table>
-
-<script>
-/* MENU */
-function openMenu(){document.getElementById("menu").style.width="250px";}
-function closeMenu(){document.getElementById("menu").style.width="0";}
-
-/* OFFICE */
-function showOffice(id){
-document.querySelectorAll('.office').forEach(o=>o.style.display="none");
-document.getElementById(id).style.display="block";
-}
-function closeOffice(){document.querySelectorAll('.office').forEach(o=>o.style.display="none");}
-
-/* LANGUAGE SWITCH */
-let lang='sw';
-function toggleLanguage(){
-if(lang==='sw'){
-lang='eng';
-document.getElementById('langBtn').innerText='ENG';
-document.getElementById('notificationText').innerText="Period started – Please select subject, teacher, and time for each period";
-document.getElementById('headerForm').innerText="Form One to Form Four";
-}else{
-lang='sw';
-document.getElementById('langBtn').innerText='SW';
-document.getElementById('notificationText').innerText="Kipindi kimeanza – Tafadhali chagua somo, mwalimu, na muda kila kipindi";
-document.getElementById('headerForm').innerText="Form One hadi Form Four";
-}
-}
-
-/* RESET DATA */
-function resetData(){localStorage.removeItem('ratiba'); location.reload();}
-
-/* WALIMU */
-const walimu=[
-"Denis Maige","Damiani Lushinge","Omari Mniru","Mario Maketa",
-"Method Maginga","Samwel Msabila","Mwansiti Mbwana",
-"Agness Tarence","Joyce Makoli","Nicholous Godfrey",
-"Petro Benjamin","Kinunda Godfrid","Baraka John"
-];
-
-/* MASOMO */
-const masomo=[
-"Physics","History","Biology","Mathematics","Business Studies",
-"Chemistry","English Language","English Literature",
-"Civics","Geography","Kiswahili"
-];
-
-/* LOCAL STORAGE */
-function saveData(){
-let data=[];
-document.querySelectorAll("#periodTable tr").forEach(row=>{
-let subject=row.querySelector(".subject select");
-let teacher=row.querySelector(".teacher select");
-let time=row.querySelector("input[type=time]");
-let students=row.querySelector("input[type=number]");
-if(subject){data.push({subject:subject.value,teacher:teacher.value,time:time.value,students:students.value});}
-});
-localStorage.setItem("ratiba",JSON.stringify(data));
-}
-
-function loadData(){
-let data=JSON.parse(localStorage.getItem("ratiba")||"[]");
-let i=0;
-document.querySelectorAll("#periodTable tr").forEach(row=>{
-let subject=row.querySelector(".subject select");
-let teacher=row.querySelector(".teacher select");
-let time=row.querySelector("input[type=time]");
-let students=row.querySelector("input[type=number]");
-if(subject && data[i]){
-subject.value=data[i].subject;
-teacher.value=data[i].teacher;
-time.value=data[i].time;
-students.value=data[i].students;
-i++;
-}
-});
-}
-
-/* DROPDOWN */
-function dropdown(list,title){
-let html=`<select onchange="saveData()"><option>${title}</option>`;
-list.forEach(i=>html+=`<option>${i}</option>`);
-html+="</select>";
-return html;
-}
-function addDropdowns(){
-document.querySelectorAll('.subject').forEach(td=>{td.innerHTML=dropdown(masomo,"Chagua Somo");});
-document.querySelectorAll('.teacher').forEach(td=>{td.innerHTML=dropdown(walimu,"Chagua Mwalimu");});
-}
-
-/* AUTO BELL */
-function checkBell(){
-let now=new Date();
-let current=now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0');
-document.querySelectorAll('input[type="time"]').forEach(t=>{
-if(t.value===current){
-let bell=document.getElementById("bellNotice");
-bell.style.display="block";
-let audio=new Audio("https://actions.google.com/sounds/v1/alarms/school_bell.ogg");
-audio.play();
-setTimeout(()=>bell.style.display="none",10000);
-}
-});
-}
-setInterval(checkBell,60000);
-
-/* ADD PERIOD FUNCTION */
-function addPeriod(){
-let p=document.getElementById("periodSelect").value;
-if(!p) return;
-let table=document.getElementById("periodTable");
-let row=table.insertRow();
-row.innerHTML=`
-<td>${p}</td>
+<tr>
+<td>
+<select>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+</select>
+</td>
 <td class="subject"></td>
-<td><input type="time" onchange="saveData()"></td>
+<td><input type="time"></td>
 <td class="teacher"></td>
-<td><input type="number" onchange="saveData()"></td>
-`;
-addDropdowns();
-saveData();
-}
-
-/* REPORT */
-function generateReport(){
-let subjects={};
-document.querySelectorAll("table tr").forEach(row=>{
-let subject=row.querySelector(".subject select");
-let students=row.querySelector("input[type=number]");
-if(subject && students){
-let sub=subject.value;
-let num=parseInt(students.value)||0;
-if(sub && sub!="Chagua Somo"){
-if(!subjects[sub])subjects[sub]=0;
-subjects[sub]+=num;
-}
-}
-});
-let table=document.getElementById("reportTable");
-table.innerHTML="<tr><th>Somo</th><th>Jumla ya Wanafunzi</th></tr>";
-for(let s in subjects){table.innerHTML+=`<tr><td>${s}</td><td>${subjects[s]}</td></tr>`;}
-}
-
-setTimeout(loadData,500);
-addDropdowns();
-
-</script>
-
-</body>
-</html>
+<td><
