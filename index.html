@@ -1,147 +1,129 @@
 <!DOCTYPE html>
-<html>
+<html lang="sw">
 <head>
-  <title>Ratiba ya Vipindi</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ratiba ya Vipindi – Nguliguli Secondary</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#ffffff">
   <style>
-    body { font-family: Arial; padding: 20px; }
-    input { margin: 5px; padding: 5px; width: 150px; }
-    button { padding: 5px 10px; margin: 5px; }
-    ul { margin-top: 20px; padding-left: 0; list-style: none; }
-    li { margin: 5px 0; background: #f2f2f2; padding: 5px; border-radius: 5px; }
-    .editBtn, .deleteBtn { margin-left: 10px; padding: 2px 5px; font-size: 12px; }
-    .text { font-weight: bold; }
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }
+    header { text-align:center; margin-bottom:30px; }
+    header h1 { color:#1a73e8; font-size:2.5em; margin:0; }
+    header h2 { color:#555; font-size:1.5em; margin:5px 0; }
+    header p { color:#777; margin:5px 0; font-size:1em; }
+    h2.form-title { color:#1a73e8; margin-top:30px; }
+    table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
+    th, td { border: 1px solid #999; padding: 8px; text-align: left; }
+    th { background-color: #1a73e8; color: white; }
+    select, input[type="time"] {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 4px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+    td select:focus, td input:focus { border-color: #1a73e8; outline: none; }
   </style>
 </head>
 <body>
 
-<h2>Ratiba ya Vipindi</h2>
-
-<input id="somo" placeholder="Somo">
-<input id="mwalimu" placeholder="Mwalimu">
-<input id="muda" type="time">
-<button onclick="ongeza()">Ongeza</button>
-
-<ul id="ratiba"></ul>
-
-<!-- Audio for notification -->
-<audio id="alarm">
-  <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
-</audio>
+<header>
+  <h1>Nguliguli Secondary School</h1>
+  <h2>Ratiba ya Vipindi – Form 1 hadi 4</h2>
+  <p>Tafadhali chagua mwalimu na muda kila kipindi</p>
+</header>
 
 <script>
-let RATIBA = [];
+  const walimu = [
+    "Chinula A.", "Mwakyusa B.", "Juma C.", "Mushi D.", "Nyoni E.", 
+    "Kabaka F.", "Makundi G.", "Hussein H.", "Omari I.", "Baraka J."
+  ];
 
-// Load from localStorage
-if(localStorage.getItem("ratiba")){
-  RATIBA = JSON.parse(localStorage.getItem("ratiba"));
-  RATIBA.forEach(function(item,index){
-    displayItem(item,index);
-  });
-}
-
-// Add new item
-function ongeza(){
-  let somo = document.getElementById("somo").value.trim();
-  let mwalimu = document.getElementById("mwalimu").value.trim();
-  let muda = document.getElementById("muda").value.trim();
-
-  if(somo === "" || mwalimu === "" || muda === ""){
-    alert("Tafadhali jaza somo, mwalimu, na muda");
-    return;
+  function generateTeacherDropdown() {
+    let dropdown = '<select>';
+    dropdown += '<option value="">Chagua mwalimu</option>';
+    walimu.forEach(name => {
+      dropdown += `<option value="${name}">${name}</option>`;
+    });
+    dropdown += '</select>';
+    return dropdown;
   }
 
-  let item = {somo: somo, mwalimu: mwalimu, muda: muda, notified: false};
-  RATIBA.push(item);
-  localStorage.setItem("ratiba", JSON.stringify(RATIBA));
-  displayItem(item,RATIBA.length-1);
+  function addDropdowns() {
+    const tds = document.querySelectorAll('td.teacher');
+    tds.forEach(td => {
+      td.innerHTML = generateTeacherDropdown();
+    });
+  }
 
-  // clear inputs
-  document.getElementById("somo").value = "";
-  document.getElementById("mwalimu").value = "";
-  document.getElementById("muda").value = "";
-}
+  window.onload = addDropdowns;
 
-// Display item in list with edit/delete
-function displayItem(item,index){
-  let li = document.createElement("li");
-  li.id = "item"+index;
+  function generateTimetable(formName, schedule) {
+    document.write(`<h2 class="form-title">${formName}</h2><table>
+      <tr>
+        <th>Siku</th>
+        <th>Kipindi</th>
+        <th>Somo</th>
+        <th>Muda</th>
+        <th>Mwalimu</th>
+      </tr>`);
 
-  let span = document.createElement("span");
-  span.className = "text";
-  span.textContent = item.somo + " - " + item.mwalimu + " - " + item.muda;
-  li.appendChild(span);
+    schedule.forEach(day => {
+      const rowspan = day.periods.length;
+      day.periods.forEach((period, index) => {
+        document.write('<tr>');
+        if(index === 0){
+          document.write(`<td rowspan="${rowspan}">${day.siku}</td>`);
+        }
+        document.write(`<td>${period.kipindi}</td>`);
+        document.write(`<td>${period.somo}</td>`);
+        document.write(`<td><input type="time" value="${period.muda}"></td>`);
+        document.write('<td class="teacher"></td>');
+        document.write('</tr>');
+      });
+    });
 
-  // Edit button
-  let editBtn = document.createElement("button");
-  editBtn.textContent = "Edit";
-  editBtn.className = "editBtn";
-  editBtn.onclick = function(){
-    let newSomo = prompt("Somo:", item.somo);
-    let newMwalimu = prompt("Mwalimu:", item.mwalimu);
-    let newMuda = prompt("Muda (HH:mm):", item.muda);
-    if(newSomo && newMwalimu && newMuda){
-      item.somo = newSomo;
-      item.mwalimu = newMwalimu;
-      item.muda = newMuda;
-      item.notified = false; // reset notification
-      RATIBA[index] = item;
-      localStorage.setItem("ratiba", JSON.stringify(RATIBA));
-      span.textContent = item.somo + " - " + item.mwalimu + " - " + item.muda;
-    }
-  };
+    document.write('</table>');
+  }
 
-  // Delete button
-  let deleteBtn = document.createElement("button");
-  deleteBtn.textContent = "Delete";
-  deleteBtn.className = "deleteBtn";
-  deleteBtn.onclick = function(){
-    RATIBA.splice(index,1);
-    localStorage.setItem("ratiba", JSON.stringify(RATIBA));
-    refreshList();
-  };
+  // Schedules
+  const form1Schedule = [
+    {siku:"Jumatatu", periods:[{kipindi:1, somo:"Mathematics", muda:"08:00"}, {kipindi:2, somo:"Kiswahili", muda:"08:45"}, {kipindi:3, somo:"English Language", muda:"09:30"}]},
+    {siku:"Jumanne", periods:[{kipindi:1, somo:"Biology", muda:"08:00"}, {kipindi:2, somo:"History", muda:"08:45"}, {kipindi:3, somo:"Geography", muda:"09:30"}]},
+    {siku:"Jumatano", periods:[{kipindi:1, somo:"Chemistry", muda:"08:00"}, {kipindi:2, somo:"Mathematics", muda:"08:45"}, {kipindi:3, somo:"English Literature", muda:"09:30"}]},
+    {siku:"Alhamisi", periods:[{kipindi:1, somo:"Physics", muda:"08:00"}, {kipindi:2, somo:"Business Studies", muda:"08:45"}, {kipindi:3, somo:"Kiswahili", muda:"09:30"}]},
+    {siku:"Ijumaa", periods:[{kipindi:1, somo:"Biology", muda:"08:00"}, {kipindi:2, somo:"English Language", muda:"08:45"}, {kipindi:3, somo:"History", muda:"09:30"}]}
+  ];
 
-  li.appendChild(editBtn);
-  li.appendChild(deleteBtn);
-  document.getElementById("ratiba").appendChild(li);
-}
+  const form2Schedule = [
+    {siku:"Jumatatu", periods:[{kipindi:1, somo:"Physics", muda:"08:00"}, {kipindi:2, somo:"Business Studies", muda:"08:45"}, {kipindi:3, somo:"English Literature", muda:"09:30"}]},
+    {siku:"Jumanne", periods:[{kipindi:1, somo:"Mathematics", muda:"08:00"}, {kipindi:2, somo:"Kiswahili", muda:"08:45"}, {kipindi:3, somo:"Biology", muda:"09:30"}]},
+    {siku:"Jumatano", periods:[{kipindi:1, somo:"Chemistry", muda:"08:00"}, {kipindi:2, somo:"English Language", muda:"08:45"}, {kipindi:3, somo:"History", muda:"09:30"}]},
+    {siku:"Alhamisi", periods:[{kipindi:1, somo:"Physics", muda:"08:00"}, {kipindi:2, somo:"Geography", muda:"08:45"}, {kipindi:3, somo:"Business Studies", muda:"09:30"}]},
+    {siku:"Ijumaa", periods:[{kipindi:1, somo:"Mathematics", muda:"08:00"}, {kipindi:2, somo:"Kiswahili", muda:"08:45"}, {kipindi:3, somo:"English Literature", muda:"09:30"}]}
+  ];
 
-// Refresh list after delete
-function refreshList(){
-  document.getElementById("ratiba").innerHTML = "";
-  RATIBA.forEach(function(item,index){
-    displayItem(item,index);
-  });
-}
+  const form3Schedule = [
+    {siku:"Jumatatu", periods:[{kipindi:1, somo:"Chemistry", muda:"08:00"}, {kipindi:2, somo:"Mathematics", muda:"08:45"}, {kipindi:3, somo:"Kiswahili", muda:"09:30"}]},
+    {siku:"Jumanne", periods:[{kipindi:1, somo:"Physics", muda:"08:00"}, {kipindi:2, somo:"English Language", muda:"08:45"}, {kipindi:3, somo:"Biology", muda:"09:30"}]},
+    {siku:"Jumatano", periods:[{kipindi:1, somo:"Business Studies", muda:"08:00"}, {kipindi:2, somo:"English Literature", muda:"08:45"}, {kipindi:3, somo:"History", muda:"09:30"}]},
+    {siku:"Alhamisi", periods:[{kipindi:1, somo:"Mathematics", muda:"08:00"}, {kipindi:2, somo:"Kiswahili", muda:"08:45"}, {kipindi:3, somo:"Geography", muda:"09:30"}]},
+    {siku:"Ijumaa", periods:[{kipindi:1, somo:"Physics", muda:"08:00"}, {kipindi:2, somo:"Biology", muda:"08:45"}, {kipindi:3, somo:"Chemistry", muda:"09:30"}]}
+  ];
 
-// Notification every minute
-setInterval(function(){
-  let now = new Date();
-  let hh = now.getHours().toString().padStart(2,'0');
-  let mm = now.getMinutes().toString().padStart(2,'0');
-  let currentTime = hh + ":" + mm;
+  const form4Schedule = [
+    {siku:"Jumatatu", periods:[{kipindi:1, somo:"Physics", muda:"08:00"}, {kipindi:2, somo:"Biology", muda:"08:45"}, {kipindi:3, somo:"History", muda:"09:30"}]},
+    {siku:"Jumanne", periods:[{kipindi:1, somo:"Mathematics", muda:"08:00"}, {kipindi:2, somo:"Kiswahili", muda:"08:45"}, {kipindi:3, somo:"English Literature", muda:"09:30"}]},
+    {siku:"Jumatano", periods:[{kipindi:1, somo:"Chemistry", muda:"08:00"}, {kipindi:2, somo:"English Language", muda:"08:45"}, {kipindi:3, somo:"Business Studies", muda:"09:30"}]},
+    {siku:"Alhamisi", periods:[{kipindi:1, somo:"Physics", muda:"08:00"}, {kipindi:2, somo:"Geography", muda:"08:45"}, {kipindi:3, somo:"Mathematics", muda:"09:30"}]},
+    {siku:"Ijumaa", periods:[{kipindi:1, somo:"Biology", muda:"08:00"}, {kipindi:2, somo:"History", muda:"08:45"}, {kipindi:3, somo:"Kiswahili", muda:"09:30"}]}
+  ];
 
-  RATIBA.forEach(function(item){
-    if(item.muda === currentTime && !item.notified){
-      alert("Kipindi cha " + item.somo + " kinaanza sasa!");
-      document.getElementById("alarm").play();
-      item.notified = true;
-    }
-  });
-}, 60000);
-
-// Request notification permission (for future PWA push notifications)
-if("Notification" in window){
-  Notification.requestPermission();
-}
-
-// Service Worker registration
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./service-worker.js')
-    .then(reg => console.log('Service Worker ime-register: ', reg))
-    .catch(err => console.log('Service Worker registration failed: ', err));
-}
+  generateTimetable("Form 1", form1Schedule);
+  generateTimetable("Form 2", form2Schedule);
+  generateTimetable("Form 3", form3Schedule);
+  generateTimetable("Form 4", form4Schedule);
 </script>
+
 </body>
 </html>
