@@ -32,6 +32,7 @@ select,input{width:100%;padding:4px;}
 .notification{background-color:#1a73e8;color:#fff;font-weight:bold;padding:10px;margin:10px;border-radius:6px;text-align:center;}
 #bellNotice{display:none;position:fixed;top:70px;right:20px;background:#f9ab00;color:#000;padding:10px 20px;border-radius:6px;font-weight:bold;z-index:9999;}
 .saveBtn{background:#f9ab00;color:#000;padding:5px 10px;border-radius:4px;cursor:pointer;}
+.editBtn{background:#34a853;color:#fff;padding:5px 10px;border-radius:4px;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -126,17 +127,12 @@ function resetData(){localStorage.removeItem('savedRow'); location.reload();}
 const walimu=["Denis Maige","Damiani Lushinge","Omari Mniru","Mario Maketa","Method Maginga","Samwel Msabila","Mwansiti Mbwana","Agness Tarence","Joyce Makoli","Nicholous Godfrey","Petro Benjamin","Kinunda Godfrid","Baraka John"];
 const masomo=["Physics","History","Biology","Mathematics","Business Studies","Chemistry","English Language","English Literature","Civics","Geography","Kiswahili"];
 
-/* SAVE & HIDE OTHERS + AUTO RESTORE */
+/* SAVE & HIDE OTHERS + EDIT + ALERT */
 function saveRowAndFilter(button){
   let row=button.closest("tr");
   let subject=row.querySelector(".subject select").value;
-  let teacher=row.querySelector(".teacher select").value;
-  let time=row.querySelector("input[type=time]").value;
-  let students=row.querySelector("input[type=number]").value;
-  localStorage.setItem('savedRow',JSON.stringify({tableId:row.closest('table').className,rowIndex:Array.from(row.parentNode.children).indexOf(row),students}));
-  alert("Kipindi cha "+subject+" kimesave: "+students+" wanafunzi");
-
-  // Hide all other rows
+  localStorage.setItem('savedRow',JSON.stringify({tableId:row.closest('table').className,rowIndex:Array.from(row.parentNode.children).indexOf(row)}));
+  alert("Kipindi cha "+subject+" kimehifadhiwa");
   let table=row.closest("table");
   table.querySelectorAll("tr").forEach(r=>{
     if(r!==row && r.querySelector("td")) r.style.display="none";
@@ -144,8 +140,29 @@ function saveRowAndFilter(button){
   });
 }
 
+function editRows(button){
+  let table=button.closest('table');
+  table.querySelectorAll("tr").forEach(r=>{
+    if(r.querySelector("td")) r.style.display="table-row";
+  });
+  // Play sound + notification
+  let audio=new Audio("https://actions.google.com/sounds/v1/alarms/school_bell.ogg");
+  audio.play();
+  if("Notification" in window){
+    if(Notification.permission==="granted"){
+      new Notification("Editing Rows",{body:"Sasa unaweza ku-edit vipindi vyote",icon:"icon-192x192.png"});
+    } else {
+      Notification.requestPermission().then(p=>{
+        if(p==="granted"){
+          new Notification("Editing Rows",{body:"Sasa unaweza ku-edit vipindi vyote",icon:"icon-192x192.png"});
+        }
+      });
+    }
+  }
+}
+
 /* DROPDOWN */
-function dropdown(list,title){let html='<select><option>'+title+'</option>';list.forEach(i=>html+='<option>'+i+'</option>');html+="</select>";return html;}
+function dropdown(list,title){let html='<select>'+list.map(i=>`<option>${i}</option>`).join('')+'</select>';return html;}
 function addDropdowns(){document.querySelectorAll('.subject').forEach(td=>{td.innerHTML=dropdown(masomo,"Chagua Somo");});document.querySelectorAll('.teacher').forEach(td=>{td.innerHTML=dropdown(walimu,"Chagua Mwalimu");});}
 
 /* AUTO BELL */
@@ -180,13 +197,11 @@ function generateReport(){
   let subjects={};
   document.querySelectorAll("table tr").forEach(row=>{
     let subject=row.querySelector(".subject select");
-    let students=row.querySelector("input[type=number]");
-    if(subject && students){
+    if(subject){
       let sub=subject.value;
-      let num=parseInt(students.value)||0;
       if(sub && sub!="Chagua Somo"){
         if(!subjects[sub]) subjects[sub]=0;
-        subjects[sub]+=num;
+        subjects[sub]+=1;
       }
     }
   });
@@ -195,9 +210,9 @@ function generateReport(){
   for(let s in subjects){table.innerHTML+='<tr><td>'+s+'</td><td>'+subjects[s]+'</td></tr>';}
 }
 
-/* RATIBA + SAVE COLUMN + FILTER */
+/* RATIBA + SAVE & EDIT BUTTONS */
 function generate(formName,schedule,style){
-  document.write('<h2>'+formName+'</h2><table class="'+style+'"><tr><th>Siku</th><th>Kipindi</th><th>Somo</th><th>Muda</th><th>Mwalimu</th><th>Save</th><th>Idadi ya Wanafunzi</th></tr>');
+  document.write('<h2>'+formName+'</h2><table class="'+style+'"><tr><th>Siku</th><th>Kipindi</th><th>Somo</th><th>Muda</th><th>Mwalimu</th><th>Edit</th><th>Save</th></tr>');
   schedule.forEach(day=>{
     let rowspan=day.periods.length;
     day.periods.forEach((p,i)=>{
@@ -207,8 +222,8 @@ function generate(formName,schedule,style){
       document.write('<td class="subject"></td>');
       document.write('<td><input type="time" value="'+p.muda+'"></td>');
       document.write('<td class="teacher"></td>');
+      document.write('<td><button class="editBtn" onclick="editRows(this)">Edit</button></td>');
       document.write('<td><button class="saveBtn" onclick="saveRowAndFilter(this)">Save</button></td>');
-      document.write('<td><input type="number"></td>');
       document.write("</tr>");
     });
   });
@@ -230,7 +245,6 @@ generate("Form Four",schedule,"form4");
 
 setTimeout(()=>{
   addDropdowns();
-  // Restore saved row if any
   let saved=localStorage.getItem('savedRow');
   if(saved){
     saved=JSON.parse(saved);
@@ -241,10 +255,9 @@ setTimeout(()=>{
         if(r!==row && r.querySelector("td")) r.style.display="none";
         else r.style.display="table-row";
       });
-      row.querySelector('input[type=number]').value=saved.students;
     }
   }
 },500);
 </script>
 </body>
-  </html>
+</html>
