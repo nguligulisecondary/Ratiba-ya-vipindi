@@ -32,7 +32,9 @@ select,input{width:100%;padding:4px;}
 .notification{background-color:#1a73e8;color:#fff;font-weight:bold;padding:10px;margin:10px;border-radius:6px;text-align:center;}
 #bellNotice{display:none;position:fixed;top:70px;right:20px;background:#f9ab00;color:#000;padding:10px 20px;border-radius:6px;font-weight:bold;z-index:9999;}
 .saveBtn{background:#f9ab00;color:#000;padding:5px 10px;border-radius:4px;cursor:pointer;}
-.editBtn{background:#34a853;color:#fff;padding:5px 10px;border-radius:4px;cursor:pointer;}
+.editBtn{background:#34a853;color:#fff;padding:5px 10px;border-radius:4px;}
+.auth-input{margin:5px 0;padding:8px;width:95%;}
+.auth-btn{margin:5px 0;padding:8px 12px;background:#1a73e8;color:#fff;border:none;border-radius:4px;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -49,6 +51,7 @@ select,input{width:100%;padding:4px;}
 </header>
 
 <div class="notification" id="notificationText">Kipindi kimeanza – Tafadhali chagua somo, mwalimu, na muda kila kipindi</div>
+<div id="bellNotice">🔔 Kipindi Kimeanza</div>
 
 <div id="menu" class="sidebar">
   <span class="closebtn" onclick="closeMenu()">×</span>
@@ -64,7 +67,22 @@ select,input{width:100%;padding:4px;}
   <a onclick="resetData()">Reset Data</a>
 </div>
 
-<div id="bellNotice">🔔 Kipindi Kimeanza</div>
+<div id="authScreen" class="office" style="display:block;">
+  <h3>Sign In</h3>
+  <input type="text" id="username" class="auth-input" placeholder="Username">
+  <input type="password" id="password" class="auth-input" placeholder="Password">
+  <button class="auth-btn" onclick="signIn()">Sign In</button>
+  <p>Huna account? <a href="#" onclick="showRegister()">Register</a></p>
+  <button class="auth-btn" onclick="continueAsGuest()">Continue as Guest</button>
+</div>
+
+<div id="registerScreen" class="office">
+  <h3>Register Account</h3>
+  <input type="text" id="regUsername" class="auth-input" placeholder="Username">
+  <input type="password" id="regPassword" class="auth-input" placeholder="Password">
+  <button class="auth-btn" onclick="registerAccount()">Register</button>
+  <button class="auth-btn" onclick="backToAuth()">Back</button>
+</div>
 
 <div id="head" class="office">
   <h3>Office ya Mkuu wa Shule</h3>
@@ -98,128 +116,162 @@ select,input{width:100%;padding:4px;}
 </div>
 
 <script>
-/* MENU */
+/* ===== MENU ===== */
 function openMenu(){document.getElementById("menu").style.width="250px";}
 function closeMenu(){document.getElementById("menu").style.width="0";}
 function showOffice(id){document.querySelectorAll('.office').forEach(o=>o.style.display="none");document.getElementById(id).style.display="block";}
 function closeOffice(){document.querySelectorAll('.office').forEach(o=>o.style.display="none");}
 
-/* LANGUAGE SWITCH */
+/* ===== LANGUAGE SWITCH ===== */
 let lang='sw';
 function toggleLanguage(){
-if(lang==='sw'){
-lang='eng';
-document.getElementById('langBtn').innerText='ENG';
-document.getElementById('notificationText').innerText="Period started – Please select subject, teacher, and time for each period";
-document.getElementById('headerForm').innerText="Form One to Form Four";
-}else{
-lang='sw';
-document.getElementById('langBtn').innerText='SW';
-document.getElementById('notificationText').innerText="Kipindi kimeanza – Tafadhali chagua somo, mwalimu, na muda kila kipindi";
-document.getElementById('headerForm').innerText="Form One hadi Form Four";
-}
+  if(lang==='sw'){
+    lang='eng';
+    document.getElementById('langBtn').innerText='ENG';
+    document.getElementById('notificationText').innerText="Period started – Please select subject, teacher, and time for each period";
+    document.getElementById('headerForm').innerText="Form One to Form Four";
+  } else {
+    lang='sw';
+    document.getElementById('langBtn').innerText='SW';
+    document.getElementById('notificationText').innerText="Kipindi kimeanza – Tafadhali chagua somo, mwalimu, na muda kila kipindi";
+    document.getElementById('headerForm').innerText="Form One hadi Form Four";
+  }
 }
 
-/* RESET DATA */
-function resetData(){localStorage.removeItem('savedRow'); location.reload();}
+/* ===== RESET DATA ===== */
+function resetData(){
+  localStorage.removeItem('guestData');
+  let currentUser = localStorage.getItem('currentUser');
+  if(currentUser && currentUser!=='guest'){
+    let accounts=JSON.parse(localStorage.getItem('accounts')||'{}');
+    if(accounts[currentUser]){
+      accounts[currentUser].savedRow=null;
+      localStorage.setItem('accounts',JSON.stringify(accounts));
+    }
+  }
+  location.reload();
+}
 
-/* WALIMU & MASOMO */
+/* ===== WALIMU & MASOMO ===== */
 const walimu=["Denis Maige","Damiani Lushinge","Omari Mniru","Mario Maketa","Method Maginga","Samwel Msabila","Mwansiti Mbwana","Agness Tarence","Joyce Makoli","Nicholous Godfrey","Petro Benjamin","Kinunda Godfrid","Baraka John"];
 const masomo=["Physics","History","Biology","Mathematics","Business Studies","Chemistry","English Language","English Literature","Civics","Geography","Kiswahili"];
 
-/* SAVE & HIDE OTHERS + EDIT + ALERT */
+/* ===== SAVE + EDIT + HIDE OTHERS ===== */
 function saveRowAndFilter(button){
-let row=button.closest("tr");
-let table=row.closest("table");
-let subject=row.querySelector(".subject select").value;
-// Save visible row only
-localStorage.setItem('savedRow',JSON.stringify({tableId:table.className,rowIndex:Array.from(row.parentNode.children).indexOf(row)}));
-alert("Kipindi cha "+subject+" kimehifadhiwa");
-table.querySelectorAll("tr").forEach(r=>{
-if(r!==row && r.querySelector("td")) r.style.display="none";
-else r.style.display="table-row";
-});
+  let row = button.closest("tr");
+  let subject = row.querySelector(".subject select").value;
+  let table = row.closest('table');
+  let savedRowData = { tableId: table.className, rowIndex: Array.from(row.parentNode.children).indexOf(row) };
+  let currentUser = localStorage.getItem('currentUser');
+  if(currentUser === 'guest'){
+    localStorage.setItem('guestData', JSON.stringify(savedRowData));
+  } else {
+    let accounts = JSON.parse(localStorage.getItem('accounts')||'{}');
+    if(accounts[currentUser]){
+      accounts[currentUser].savedRow = savedRowData;
+      localStorage.setItem('accounts', JSON.stringify(accounts));
+    }
+  }
+  alert("Kipindi cha "+subject+" kimehifadhiwa");
+  table.querySelectorAll("tr").forEach(r=>{
+    if(r!==row && r.querySelector("td")) r.style.display="none";
+    else r.style.display="table-row";
+  });
 }
 
 function editRows(button){
-let table=button.closest('table');
-table.querySelectorAll("tr").forEach(r=>{
-if(r.querySelector("td")) r.style.display="table-row";
-});
-// Play sound + notification
-let audio=new Audio("https://actions.google.com/sounds/v1/alarms/school_bell.ogg");
-audio.play();
-if("Notification" in window){
-if(Notification.permission==="granted"){
-new Notification("Editing Rows",{body:"Sasa unaweza ku-edit vipindi vyote",icon:"icon-192x192.png"});
-} else {
-Notification.requestPermission().then(p=>{
-if(p==="granted"){
-new Notification("Editing Rows",{body:"Sasa unaweza ku-edit vipindi vyote",icon:"icon-192x192.png"});
-}
-});
-}
-}
+  let table=button.closest('table');
+  table.querySelectorAll("tr").forEach(r=>{
+    if(r.querySelector("td")) r.style.display="table-row";
+  });
+  let audio=new Audio("https://actions.google.com/sounds/v1/alarms/school_bell.ogg");
+  audio.play();
+  if("Notification" in window){
+    if(Notification.permission==="granted"){
+      new Notification("Editing Rows",{body:"Sasa unaweza ku-edit vipindi vyote",icon:"icon-192x192.png"});
+    } else {
+      Notification.requestPermission().then(p=>{
+        if(p==="granted"){
+          new Notification("Editing Rows",{body:"Sasa unaweza ku-edit vipindi vyote",icon:"icon-192x192.png"});
+        }
+      });
+    }
+  }
 }
 
-/* DROPDOWN */
+/* ===== DROPDOWN ===== */
 function dropdown(list){return '<select>'+list.map(i=>`<option>${i}</option>`).join('')+'</select>';}
-function addDropdowns(){document.querySelectorAll('.subject').forEach(td=>{td.innerHTML=dropdown(masomo);});document.querySelectorAll('.teacher').forEach(td=>{td.innerHTML=dropdown(walimu);});}
-
-/* AUTO BELL */
-function checkBell(){
-let now=new Date();
-let current=now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0');
-document.querySelectorAll('input[type="time"]').forEach(t=>{
-if(t.value===current){
-let bell=document.getElementById("bellNotice");
-bell.style.display="block";
-let audio=new Audio("https://actions.google.com/sounds/v1/alarms/school_bell.ogg");
-audio.play();
-setTimeout(()=>bell.style.display="none",10000);
+function addDropdowns(){
+  document.querySelectorAll('.subject').forEach(td=>{td.innerHTML=dropdown(masomo);});
+  document.querySelectorAll('.teacher').forEach(td=>{td.innerHTML=dropdown(walimu);});
 }
-});
+
+/* ===== AUTO BELL ===== */
+function checkBell(){
+  let now=new Date();
+  let current=now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0');
+  document.querySelectorAll('input[type="time"]').forEach(t=>{
+    if(t.value===current){
+      let bell=document.getElementById("bellNotice");
+      bell.style.display="block";
+      let audio=new Audio("https://actions.google.com/sounds/v1/alarms/school_bell.ogg");
+      audio.play();
+      if("Notification" in window){
+        if(Notification.permission==="granted"){
+          new Notification("Kipindi Kimeanza",{body:"Tafadhali chagua somo, mwalimu, na muda kila kipindi",icon:"icon-192x192.png"});
+        } else {
+          Notification.requestPermission().then(p=>{
+            if(p==="granted"){
+              new Notification("Kipindi Kimeanza",{body:"Tafadhali chagua somo, mwalimu, na muda kila kipindi",icon:"icon-192x192.png"});
+            }
+          });
+        }
+      }
+      setTimeout(()=>bell.style.display="none",10000);
+    }
+  });
 }
 setInterval(checkBell,60000);
 
-/* REPORT */
+/* ===== REPORT ===== */
 function generateReport(){
-let subjects={};
-document.querySelectorAll("table tr").forEach(row=>{
-let subject=row.querySelector(".subject select");
-if(subject){
-let sub=subject.value;
-if(sub && sub!="Chagua Somo"){
-if(!subjects[sub]) subjects[sub]=0;
-subjects[sub]+=1;
-}
-}
-});
-let table=document.getElementById("reportTable");
-table.innerHTML="<tr><th>Somo</th><th>Jumla ya Wanafunzi</th></tr>";
-for(let s in subjects){table.innerHTML+='<tr><td>'+s+'</td><td>'+subjects[s]+'</td></tr>';}
+  let subjects={};
+  document.querySelectorAll("table tr").forEach(row=>{
+    let subject=row.querySelector(".subject select");
+    if(subject){
+      let sub=subject.value;
+      if(sub && sub!="Chagua Somo"){
+        if(!subjects[sub]) subjects[sub]=0;
+        subjects[sub]+=1;
+      }
+    }
+  });
+  let table=document.getElementById("reportTable");
+  table.innerHTML="<tr><th>Somo</th><th>Jumla ya Wanafunzi</th></tr>";
+  for(let s in subjects){table.innerHTML+='<tr><td>'+s+'</td><td>'+subjects[s]+'</td></tr>';}
 }
 
-/* RATIBA + SAVE & EDIT BUTTONS */
+/* ===== RATIBA ===== */
 function generate(formName,schedule,style){
-document.write('<h2>'+formName+'</h2><table class="'+style+'"><tr><th>Siku</th><th>Kipindi</th><th>Somo</th><th>Muda</th><th>Mwalimu</th><th>Edit</th><th>Save</th></tr>');
-schedule.forEach(day=>{
-let rowspan=day.periods.length;
-day.periods.forEach((p,i)=>{
-document.write("<tr>");
-if(i==0) document.write('<td rowspan="'+rowspan+'">'+day.siku+'</td>');
-document.write('<td>'+p.kipindi+'</td>');
-document.write('<td class="subject"></td>');
-document.write('<td><input type="time" value="'+p.muda+'"></td>');
-document.write('<td class="teacher"></td>');
-document.write('<td><button class="editBtn" onclick="editRows(this)">Edit</button></td>');
-document.write('<td><button class="saveBtn" onclick="saveRowAndFilter(this)">Save</button></td>');
-document.write("</tr>");
-});
-});
-document.write("</table>");
+  document.write('<h2>'+formName+'</h2><table class="'+style+'"><tr><th>Siku</th><th>Kipindi</th><th>Somo</th><th>Muda</th><th>Mwalimu</th><th>Edit</th><th>Save</th></tr>');
+  schedule.forEach(day=>{
+    let rowspan=day.periods.length;
+    day.periods.forEach((p,i)=>{
+      document.write("<tr>");
+      if(i==0) document.write('<td rowspan="'+rowspan+'">'+day.siku+'</td>');
+      document.write('<td>'+p.kipindi+'</td>');
+      document.write('<td class="subject"></td>');
+      document.write('<td><input type="time" value="'+p.muda+'"></td>');
+      document.write('<td class="teacher"></td>');
+      document.write('<td><button class="editBtn" onclick="editRows(this)">Edit</button></td>');
+      document.write('<td><button class="saveBtn" onclick="saveRowAndFilter(this)">Save</button></td>');
+      document.write("</tr>");
+    });
+  });
+  document.write("</table>");
 }
 
+/* ===== SCHEDULE DATA ===== */
 const schedule=[
 {siku:"Jumatatu", periods:[{kipindi:1,muda:"08:00"},{kipindi:2,muda:"08:45"},{kipindi:3,muda:"09:30"},{kipindi:4,muda:"10:15"}]},
 {siku:"Jumanne", periods:[{kipindi:1,muda:"08:00"},{kipindi:2,muda:"08:45"},{kipindi:3,muda:"09:30"},{kipindi:4,muda:"10:15"}]},
@@ -233,23 +285,29 @@ generate("Form Two",schedule,"form2");
 generate("Form Three",schedule,"form3");
 generate("Form Four",schedule,"form4");
 
-/* ADD DROPDOWNS & LOAD SAVED ROW */
+/* ===== DROPDOWNS & SAVED ROW PER USER ===== */
 setTimeout(()=>{
-addDropdowns();
-let saved=localStorage.getItem('savedRow');
-if(saved){
-saved=JSON.parse(saved);
-let table=document.querySelector('table.'+saved.tableId);
-if(table){
-let row=table.querySelectorAll('tr')[saved.rowIndex];
-table.querySelectorAll('tr').forEach(r=>{
-if(r!==row && r.querySelector("td")) r.style.display="none";
-else r.style.display="table-row";
-});
-}
-}
+  addDropdowns();
+  let currentUser = localStorage.getItem('currentUser');
+  if(currentUser){
+    let accounts = JSON.parse(localStorage.getItem('accounts')||'{}');
+    let saved = (currentUser === 'guest') ? JSON.parse(localStorage.getItem('guestData')||'null') : accounts[currentUser]?.savedRow;
+    if(saved){
+      let table=document.querySelector('table.'+saved.tableId);
+      if(table){
+        let row=table.querySelectorAll('tr')[saved.rowIndex];
+        table.querySelectorAll('tr').forEach(r=>{
+          if(r!==row && r.querySelector("td")) r.style.display="none";
+          else r.style.display="table-row";
+        });
+      }
+    }
+  }
 },500);
 
-</script>
-</body>
-</html>
+/* ===== AUTH FUNCTIONS ===== */
+function showRegister(){ document.getElementById('authScreen').style.display='none'; document.getElementById('registerScreen').style.display='block'; }
+function backToAuth(){ document.getElementById('registerScreen').style.display='none'; document.getElementById('authScreen').style.display='block'; }
+
+function registerAccount(){
+  let username = document.getElementById('regUsername').value
