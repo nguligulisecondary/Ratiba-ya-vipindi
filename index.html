@@ -121,36 +121,31 @@ function toggleLanguage(){
 }
 
 /* RESET DATA */
-function resetData(){localStorage.removeItem('savedRow'); location.reload();}
+function resetData(){localStorage.clear(); location.reload();}
 
 /* WALIMU & MASOMO */
 const walimu=["Denis Maige","Damiani Lushinge","Omari Mniru","Mario Maketa","Method Maginga","Samwel Msabila","Mwansiti Mbwana","Agness Tarence","Joyce Makoli","Nicholous Godfrey","Petro Benjamin","Kinunda Godfrid","Baraka John"];
 const masomo=["Physics","History","Biology","Mathematics","Business Studies","Chemistry","English Language","English Literature","Civics","Geography","Kiswahili"];
 
-/* SAVE & HIDE OTHERS + EDIT + ALERT */
-function saveRowAndFilter(button){
-  let row=button.closest("tr");
-  let subject=row.querySelector(".subject select").value;
-  let teacher=row.querySelector(".teacher select").value;
-  localStorage.setItem('savedRow',JSON.stringify({
-    tableId: row.closest('table').className,
-    rowIndex: Array.from(row.parentNode.children).indexOf(row),
-    subject: subject,
-    teacher: teacher
-  }));
+/* SAVE ROW + PERSISTENT LOCALSTORAGE */
+function saveRow(button){
+  let row = button.closest("tr");
+  let tableClass = row.closest("table").className;
+  let rowIndex = Array.from(row.parentNode.children).indexOf(row);
+  let subject = row.querySelector(".subject select").value;
+  let teacher = row.querySelector(".teacher select").value;
+
+  // key ya unique kwa kila row
+  let key = tableClass + "_row" + rowIndex;
+  localStorage.setItem(key, JSON.stringify({subject, teacher}));
+
   alert("Kipindi cha "+subject+" kimehifadhiwa");
-  let table=row.closest("table");
-  table.querySelectorAll("tr").forEach(r=>{
-    if(r!==row && r.querySelector("td")) r.style.display="none";
-    else r.style.display="table-row";
-  });
 }
 
+/* EDIT ROWS */
 function editRows(button){
   let table=button.closest('table');
-  table.querySelectorAll("tr").forEach(r=>{
-    if(r.querySelector("td")) r.style.display="table-row";
-  });
+  table.querySelectorAll("tr").forEach(r=>{if(r.querySelector("td")) r.style.display="table-row";});
   let audio=new Audio("https://actions.google.com/sounds/v1/alarms/school_bell.ogg");
   audio.play();
   if("Notification" in window){
@@ -167,10 +162,28 @@ function editRows(button){
 }
 
 /* DROPDOWN */
-function dropdown(list,title){return '<select>'+list.map(i=>`<option>${i}</option>`).join('')+'</select>';}
+function dropdown(list){return '<select>'+list.map(i=>`<option>${i}</option>`).join('')+'</select>';}
 function addDropdowns(){
-  document.querySelectorAll('.subject').forEach(td=>{td.innerHTML=dropdown(masomo,"Chagua Somo");});
-  document.querySelectorAll('.teacher').forEach(td=>{td.innerHTML=dropdown(walimu,"Chagua Mwalimu");});
+  document.querySelectorAll('.subject').forEach(td=>{td.innerHTML=dropdown(masomo);});
+  document.querySelectorAll('.teacher').forEach(td=>{td.innerHTML=dropdown(walimu);});
+}
+
+/* LOAD SAVED ROWS */
+function loadSavedRows(){
+  document.querySelectorAll("table").forEach(table=>{
+    let tableClass = table.className;
+    table.querySelectorAll("tr").forEach((row, i)=>{
+      if(row.querySelector(".subject select")){
+        let key = tableClass + "_row" + i;
+        let saved = localStorage.getItem(key);
+        if(saved){
+          saved = JSON.parse(saved);
+          row.querySelector(".subject select").value = saved.subject;
+          row.querySelector(".teacher select").value = saved.teacher;
+        }
+      }
+    });
+  });
 }
 
 /* AUTO BELL */
@@ -207,7 +220,7 @@ function generateReport(){
     let subject=row.querySelector(".subject select");
     if(subject){
       let sub=subject.value;
-      if(sub && sub!="Chagua Somo"){
+      if(sub){
         if(!subjects[sub]) subjects[sub]=0;
         subjects[sub]+=1;
       }
@@ -218,7 +231,7 @@ function generateReport(){
   for(let s in subjects){table.innerHTML+='<tr><td>'+s+'</td><td>'+subjects[s]+'</td></tr>';}
 }
 
-/* RATIBA + SAVE & EDIT BUTTONS */
+/* RATIBA + SAVE/EDIT */
 function generate(formName,schedule,style){
   document.write('<h2>'+formName+'</h2><table class="'+style+'"><tr><th>Siku</th><th>Kipindi</th><th>Somo</th><th>Muda</th><th>Mwalimu</th><th>Edit</th><th>Save</th></tr>');
   schedule.forEach(day=>{
@@ -231,7 +244,7 @@ function generate(formName,schedule,style){
       document.write('<td><input type="time" value="'+p.muda+'"></td>');
       document.write('<td class="teacher"></td>');
       document.write('<td><button class="editBtn" onclick="editRows(this)">Edit</button></td>');
-      document.write('<td><button class="saveBtn" onclick="saveRowAndFilter(this)">Save</button></td>');
+      document.write('<td><button class="saveBtn" onclick="saveRow(this)">Save</button></td>');
       document.write("</tr>");
     });
   });
@@ -253,22 +266,8 @@ generate("Form Four",schedule,"form4");
 
 setTimeout(()=>{
   addDropdowns();
-  let saved=localStorage.getItem('savedRow');
-  if(saved){
-    saved=JSON.parse(saved);
-    let table=document.querySelector('table.'+saved.tableId);
-    if(table){
-      let row=table.querySelectorAll('tr')[saved.rowIndex];
-      if(saved.subject) row.querySelector('.subject select').value = saved.subject;
-      if(saved.teacher) row.querySelector('.teacher select').value = saved.teacher;
-      table.querySelectorAll('tr').forEach(r=>{
-        if(r!==row && r.querySelector("td")) r.style.display="none";
-        else r.style.display="table-row";
-      });
-    }
-  }
+  loadSavedRows();
 },500);
-
 </script>
 </body>
-  </html>
+</html>
