@@ -6,164 +6,36 @@
 <title>Ratiba ya Vipindi – Nguliguli Secondary</title>
 <link rel="manifest" href="manifest.json">
 <style>
-body{
-  font-family:Arial,sans-serif;
-  padding:0;
-  margin:0;
-  background:#f4f6fb;
-}
-
-/* HEADER */
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-  background:linear-gradient(90deg,#1a73e8,#0b4db8);
-  color:white;
-  padding:15px 10px;
-  border-radius:0 0 10px 10px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.2);
-}
-header .header-left{
-  flex:1 1 70%;
-  text-align:center;
-}
-header h1{
-  margin:0;
-  font-size:4vw;
-  text-transform:uppercase;
-  letter-spacing:2px;
-}
-header h2{
-  margin:5px;
-  font-weight:normal;
-  font-size:3vw;
-  text-transform:uppercase;
-}
-header p{
-  text-transform:uppercase;
-  font-size:2.5vw;
-}
-
-/* LANGUAGE BUTTON */
-#langBtn{
-  padding:5px 10px;
-  font-weight:bold;
-  border:none;
-  border-radius:4px;
-  cursor:pointer;
-  background:white;
-  color:#1a73e8;
-  font-size:3vw;
-}
-
-/* DASH / MENU */
-.menu-btn{
-  font-size:28px;
-  cursor:pointer;
-  color:white;
-  margin-right:10px;
-}
-
-/* SIDEBAR */
-.sidebar{
-  height:100%;
-  width:0;
-  position:fixed;
-  top:0;
-  left:0;
-  background:#1a73e8;
-  overflow-x:hidden;
-  transition:0.3s;
-  padding-top:60px;
-  z-index:1000;
-}
-.sidebar a{
-  padding:12px 20px;
-  display:block;
-  color:white;
-  text-decoration:none;
-  font-size:18px;
-}
-.sidebar a:hover{
-  background:#0b4db8;
-}
-.closebtn{
-  position:absolute;
-  top:10px;
-  right:20px;
-  font-size:30px;
-  color:white;
-  cursor:pointer;
-}
-
-/* OFFICES */
-.office{
-  display:none;
-  background:white;
-  padding:20px;
-  border-radius:6px;
-  box-shadow:0 0 10px rgba(0,0,0,0.2);
-  margin-bottom:20px;
-}
-
-textarea, input[type=file]{
-  width:100%;
-  margin-top:10px;
-}
-button{
-  margin-top:10px;
-  padding:10px 15px;
-  background:#1a73e8;
-  color:white;
-  border:none;
-  cursor:pointer;
-}
-
-/* TABLE */
-table{
-  border-collapse:collapse;
-  width:100%;
-  margin-bottom:30px;
-}
-th,td{
-  border:1px solid #999;
-  padding:8px;
-}
-th{
-  color:white;
-}
-select,input{
-  width:100%;
-  padding:4px;
-}
-
-/* FORM COLORS */
-.form1 th{background:#1a73e8;}
-.form1 td{background:#e8f0fe;}
-.form2 th{background:#d93025;}
-.form2 td{background:#fce8e6;}
-.form3 th{background:#188038;}
-.form3 td{background:#e6f4ea;}
-.form4 th{background:#f9ab00;}
-.form4 td{background:#fff4e5;}
-
-/* NOTIFICATION */
-.notification{
-  background-color:#1a73e8;
-  color:#fff;
-  font-weight:bold;
-  padding:10px;
-  margin:10px;
-  border-radius:6px;
-  text-align:center;
-}
+body{font-family:Arial,sans-serif;padding:0;margin:0;background:#f4f6fb;}
+header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;background:linear-gradient(90deg,#1a73e8,#0b4db8);color:white;padding:15px 10px;border-radius:0 0 10px 10px;box-shadow:0 5px 15px rgba(0,0,0,0.2);}
+header .header-left{flex:1 1 70%;text-align:center;}
+header h1{margin:0;font-size:4vw;text-transform:uppercase;letter-spacing:2px;}
+header h2{margin:5px;font-weight:normal;font-size:3vw;text-transform:uppercase;}
+header p{font-size:2.5vw;text-transform:uppercase;}
+#langBtn{padding:5px 10px;font-weight:bold;border:none;border-radius:4px;cursor:pointer;background:white;color:#1a73e8;font-size:3vw;}
+.menu-btn{font-size:28px;cursor:pointer;color:white;margin-right:10px;}
+.sidebar{height:100%;width:0;position:fixed;top:0;left:0;background:#1a73e8;overflow-x:hidden;transition:0.3s;padding-top:60px;z-index:1000;}
+.sidebar a{padding:12px 20px;display:block;color:white;text-decoration:none;font-size:18px;}
+.sidebar a:hover{background:#0b4db8;}
+.closebtn{position:absolute;top:10px;right:20px;font-size:30px;color:white;cursor:pointer;}
+.office{display:none;background:white;padding:20px;border-radius:6px;box-shadow:0 0 10px rgba(0,0,0,0.2);margin-bottom:20px;}
+textarea,input[type=file],input[type=number],input[type=time]{width:100%;margin-top:10px;}
+button{margin-top:10px;padding:10px 15px;background:#1a73e8;color:white;border:none;cursor:pointer;}
+table{border-collapse:collapse;width:100%;margin-bottom:30px;}
+th,td{border:1px solid #999;padding:8px;}
+th{color:white;}
+select,input{width:100%;padding:4px;}
+.form1 th{background:#1a73e8;} .form1 td{background:#e8f0fe;}
+.form2 th{background:#d93025;} .form2 td{background:#fce8e6;}
+.form3 th{background:#188038;} .form3 td{background:#e6f4ea;}
+.form4 th{background:#f9ab00;} .form4 td{background:#fff4e5;}
+.notification{background-color:#1a73e8;color:#fff;font-weight:bold;padding:10px;margin:10px;border-radius:6px;text-align:center;}
+#bellNotice{display:none;position:fixed;top:70px;right:20px;background:#f9ab00;color:#000;padding:10px 20px;border-radius:6px;font-weight:bold;z-index:9999;}
+.saveBtn{background:#f9ab00;color:#000;padding:5px 10px;border-radius:4px;cursor:pointer;}
 </style>
 </head>
 <body>
 
-<!-- DASH + LANGUAGE -->
 <header>
 <div style="display:flex; align-items:center; gap:10px;">
   <span class="menu-btn" onclick="openMenu()">☰</span>
@@ -173,16 +45,10 @@ select,input{
     <p id="headerForm">Form One hadi Form Four</p>
   </div>
 </div>
-<div>
-  <button id="langBtn" onclick="toggleLanguage()">SW</button>
-</div>
+<div><button id="langBtn" onclick="toggleLanguage()">SW</button></div>
 </header>
 
-<div class="notification" id="notificationText">
-Kipindi kimeanza – Tafadhali chagua somo, mwalimu, na muda kila kipindi
-</div>
-
-<!-- SIDEBAR -->
+<div class="notification" id="notificationText">Kipindi kimeanza – Tafadhali chagua somo, mwalimu, na muda kila kipindi</div>
 <div id="menu" class="sidebar">
   <span class="closebtn" onclick="closeMenu()">×</span>
   <a onclick="showOffice('head')">Office ya Mkuu wa Shule</a>
@@ -199,13 +65,11 @@ Kipindi kimeanza – Tafadhali chagua somo, mwalimu, na muda kila kipindi
 
 <div id="bellNotice">🔔 Kipindi Kimeanza</div>
 
-<!-- OFFICES -->
 <div id="head" class="office">
   <h3>Office ya Mkuu wa Shule</h3>
   <textarea placeholder="Andika tangazo"></textarea>
   <input type="file" accept="application/pdf">
-  <br>
-  <button onclick="closeOffice()">Back</button>
+  <br><button onclick="closeOffice()">Back</button>
 </div>
 
 <div id="academic" class="office">
@@ -214,12 +78,7 @@ Kipindi kimeanza – Tafadhali chagua somo, mwalimu, na muda kila kipindi
   <input type="file" accept="application/pdf">
   <h3>Report ya Masomo</h3>
   <button onclick="generateReport()">Angalia Report</button>
-  <table id="reportTable">
-    <tr>
-      <th>Somo</th>
-      <th>Jumla ya Wanafunzi</th>
-    </tr>
-  </table>
+  <table id="reportTable"><tr><th>Somo</th><th>Jumla ya Wanafunzi</th></tr></table>
   <button onclick="closeOffice()">Back</button>
 </div>
 
@@ -227,28 +86,21 @@ Kipindi kimeanza – Tafadhali chagua somo, mwalimu, na muda kila kipindi
   <h3>Office ya Michezo</h3>
   <textarea></textarea>
   <input type="file" accept="application/pdf">
-  <br>
-  <button onclick="closeOffice()">Back</button>
+  <br><button onclick="closeOffice()">Back</button>
 </div>
 
 <div id="discipline" class="office">
   <h3>Office ya Nidhamu</h3>
   <textarea></textarea>
   <input type="file" accept="application/pdf">
-  <br>
-  <button onclick="closeOffice()">Back</button>
+  <br><button onclick="closeOffice()">Back</button>
 </div>
 
 <script>
 /* MENU */
 function openMenu(){document.getElementById("menu").style.width="250px";}
 function closeMenu(){document.getElementById("menu").style.width="0";}
-
-/* OFFICE */
-function showOffice(id){
-  document.querySelectorAll('.office').forEach(o=>o.style.display="none");
-  document.getElementById(id).style.display="block";
-}
+function showOffice(id){document.querySelectorAll('.office').forEach(o=>o.style.display="none");document.getElementById(id).style.display="block";}
 function closeOffice(){document.querySelectorAll('.office').forEach(o=>o.style.display="none");}
 
 /* LANGUAGE SWITCH */
@@ -268,65 +120,33 @@ function toggleLanguage(){
 }
 
 /* RESET DATA */
-function resetData(){localStorage.removeItem('ratiba'); location.reload();}
+function resetData(){localStorage.removeItem('savedRow'); location.reload();}
 
-/* WALIMU */
-const walimu=[
-"Denis Maige","Damiani Lushinge","Omari Mniru","Mario Maketa",
-"Method Maginga","Samwel Msabila","Mwansiti Mbwana",
-"Agness Tarence","Joyce Makoli","Nicholous Godfrey",
-"Petro Benjamin","Kinunda Godfrid","Baraka John"
-];
+/* WALIMU & MASOMO */
+const walimu=["Denis Maige","Damiani Lushinge","Omari Mniru","Mario Maketa","Method Maginga","Samwel Msabila","Mwansiti Mbwana","Agness Tarence","Joyce Makoli","Nicholous Godfrey","Petro Benjamin","Kinunda Godfrid","Baraka John"];
+const masomo=["Physics","History","Biology","Mathematics","Business Studies","Chemistry","English Language","English Literature","Civics","Geography","Kiswahili"];
 
-/* MASOMO */
-const masomo=[
-"Physics","History","Biology","Mathematics","Business Studies",
-"Chemistry","English Language","English Literature",
-"Civics","Geography","Kiswahili"
-];
+/* SAVE & HIDE OTHERS + AUTO RESTORE */
+function saveRowAndFilter(button){
+  let row=button.closest("tr");
+  let subject=row.querySelector(".subject select").value;
+  let teacher=row.querySelector(".teacher select").value;
+  let time=row.querySelector("input[type=time]").value;
+  let students=row.querySelector("input[type=number]").value;
+  localStorage.setItem('savedRow',JSON.stringify({tableId:row.closest('table').className,rowIndex:Array.from(row.parentNode.children).indexOf(row),students}));
+  alert("Kipindi cha "+subject+" kimesave: "+students+" wanafunzi");
 
-/* LOCAL STORAGE */
-function saveData(){
-  let data=[];
-  document.querySelectorAll("table tr").forEach(row=>{
-    let subject=row.querySelector(".subject select");
-    let teacher=row.querySelector(".teacher select");
-    let time=row.querySelector("input[type=time]");
-    let students=row.querySelector("input[type=number]");
-    if(subject){data.push({subject:subject.value,teacher:teacher.value,time:time.value,students:students.value});}
-  });
-  localStorage.setItem("ratiba",JSON.stringify(data));
-}
-
-function loadData(){
-  let data=JSON.parse(localStorage.getItem("ratiba")||"[]");
-  let i=0;
-  document.querySelectorAll("table tr").forEach(row=>{
-    let subject=row.querySelector(".subject select");
-    let teacher=row.querySelector(".teacher select");
-    let time=row.querySelector("input[type=time]");
-    let students=row.querySelector("input[type=number]");
-    if(subject && data[i]){
-      subject.value=data[i].subject;
-      teacher.value=data[i].teacher;
-      time.value=data[i].time;
-      students.value=data[i].students;
-      i++;
-    }
+  // Hide all other rows
+  let table=row.closest("table");
+  table.querySelectorAll("tr").forEach(r=>{
+    if(r!==row && r.querySelector("td")) r.style.display="none";
+    else r.style.display="table-row";
   });
 }
 
 /* DROPDOWN */
-function dropdown(list,title){
-  let html='<select onchange="saveData()"><option>'+title+'</option>';
-  list.forEach(i=>html+='<option>'+i+'</option>');
-  html+="</select>";
-  return html;
-}
-function addDropdowns(){
-  document.querySelectorAll('.subject').forEach(td=>{td.innerHTML=dropdown(masomo,"Chagua Somo");});
-  document.querySelectorAll('.teacher').forEach(td=>{td.innerHTML=dropdown(walimu,"Chagua Mwalimu");});
-}
+function dropdown(list,title){let html='<select><option>'+title+'</option>';list.forEach(i=>html+='<option>'+i+'</option>');html+="</select>";return html;}
+function addDropdowns(){document.querySelectorAll('.subject').forEach(td=>{td.innerHTML=dropdown(masomo,"Chagua Somo");});document.querySelectorAll('.teacher').forEach(td=>{td.innerHTML=dropdown(walimu,"Chagua Mwalimu");});}
 
 /* AUTO BELL */
 function checkBell(){
@@ -338,6 +158,17 @@ function checkBell(){
       bell.style.display="block";
       let audio=new Audio("https://actions.google.com/sounds/v1/alarms/school_bell.ogg");
       audio.play();
+      if("Notification" in window){
+        if(Notification.permission==="granted"){
+          new Notification("Kipindi Kimeanza",{body:"Tafadhali chagua somo, mwalimu, na muda kila kipindi",icon:"icon-192x192.png"});
+        } else {
+          Notification.requestPermission().then(p=>{
+            if(p==="granted"){
+              new Notification("Kipindi Kimeanza",{body:"Tafadhali chagua somo, mwalimu, na muda kila kipindi",icon:"icon-192x192.png"});
+            }
+          });
+        }
+      }
       setTimeout(()=>bell.style.display="none",10000);
     }
   });
@@ -364,9 +195,9 @@ function generateReport(){
   for(let s in subjects){table.innerHTML+='<tr><td>'+s+'</td><td>'+subjects[s]+'</td></tr>';}
 }
 
-/* RATIBA */
+/* RATIBA + SAVE COLUMN + FILTER */
 function generate(formName,schedule,style){
-  document.write('<h2>'+formName+'</h2><table class="'+style+'"><tr><th>Siku</th><th>Kipindi</th><th>Somo</th><th>Muda</th><th>Mwalimu</th><th>Idadi ya Wanafunzi</th></tr>');
+  document.write('<h2>'+formName+'</h2><table class="'+style+'"><tr><th>Siku</th><th>Kipindi</th><th>Somo</th><th>Muda</th><th>Mwalimu</th><th>Save</th><th>Idadi ya Wanafunzi</th></tr>');
   schedule.forEach(day=>{
     let rowspan=day.periods.length;
     day.periods.forEach((p,i)=>{
@@ -374,9 +205,10 @@ function generate(formName,schedule,style){
       if(i==0) document.write('<td rowspan="'+rowspan+'">'+day.siku+'</td>');
       document.write('<td>'+p.kipindi+'</td>');
       document.write('<td class="subject"></td>');
-      document.write('<td><input type="time" value="'+p.muda+'" onchange="saveData()"></td>');
+      document.write('<td><input type="time" value="'+p.muda+'"></td>');
       document.write('<td class="teacher"></td>');
-      document.write('<td><input type="number" onchange="saveData()"></td>');
+      document.write('<td><button class="saveBtn" onclick="saveRowAndFilter(this)">Save</button></td>');
+      document.write('<td><input type="number"></td>');
       document.write("</tr>");
     });
   });
@@ -396,9 +228,23 @@ generate("Form Two",schedule,"form2");
 generate("Form Three",schedule,"form3");
 generate("Form Four",schedule,"form4");
 
-setTimeout(loadData,500);
-addDropdowns();
-
+setTimeout(()=>{
+  addDropdowns();
+  // Restore saved row if any
+  let saved=localStorage.getItem('savedRow');
+  if(saved){
+    saved=JSON.parse(saved);
+    let table=document.querySelector('table.'+saved.tableId);
+    if(table){
+      let row=table.querySelectorAll('tr')[saved.rowIndex];
+      table.querySelectorAll('tr').forEach(r=>{
+        if(r!==row && r.querySelector("td")) r.style.display="none";
+        else r.style.display="table-row";
+      });
+      row.querySelector('input[type=number]').value=saved.students;
+    }
+  }
+},500);
 </script>
 </body>
   </html>
