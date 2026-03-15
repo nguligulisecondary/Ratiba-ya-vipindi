@@ -1,14 +1,11 @@
 {
-  "id": "/sessions-ya-vipindi/",
   "name": "Ratiba ya Vipindi",
   "short_name": "Ratiba",
   "description": "App ya kuona ratiba ya vipindi vya shule.",
   "start_url": "./index.html",
-  "scope": "/sessions-ya-vipindi/",
   "display": "standalone",
-  "orientation": "portrait",
-  "theme_color": "#4CAF50",
   "background_color": "#ffffff",
+  "theme_color": "#4CAF50",
   "icons": [
     {
       "src": "icon-192x192.png",
