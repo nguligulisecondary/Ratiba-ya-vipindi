@@ -50,9 +50,11 @@ select,input{width:100%;padding:4px;}
 <div><button id="langBtn" onclick="toggleLanguage()">SW</button></div>
 </header>
 
+<!-- Notification -->
 <div class="notification" id="notificationText">Kipindi kimeanza – Tafadhali chagua somo, mwalimu, na muda kila kipindi</div>
 <div id="bellNotice">🔔 Kipindi Kimeanza</div>
 
+<!-- Menu -->
 <div id="menu" class="sidebar">
   <span class="closebtn" onclick="closeMenu()">×</span>
   <a onclick="showOffice('head')">Office ya Mkuu wa Shule</a>
@@ -67,6 +69,7 @@ select,input{width:100%;padding:4px;}
   <a onclick="resetData()">Reset Data</a>
 </div>
 
+<!-- Auth Screens -->
 <div id="authScreen" class="office" style="display:block;">
   <h3>Sign In</h3>
   <input type="text" id="username" class="auth-input" placeholder="Username">
@@ -84,6 +87,7 @@ select,input{width:100%;padding:4px;}
   <button class="auth-btn" onclick="backToAuth()">Back</button>
 </div>
 
+<!-- Offices -->
 <div id="head" class="office">
   <h3>Office ya Mkuu wa Shule</h3>
   <textarea placeholder="Andika tangazo"></textarea>
@@ -139,18 +143,7 @@ function toggleLanguage(){
 }
 
 /* ===== RESET DATA ===== */
-function resetData(){
-  localStorage.removeItem('guestData');
-  let currentUser = localStorage.getItem('currentUser');
-  if(currentUser && currentUser!=='guest'){
-    let accounts=JSON.parse(localStorage.getItem('accounts')||'{}');
-    if(accounts[currentUser]){
-      accounts[currentUser].savedRow=null;
-      localStorage.setItem('accounts',JSON.stringify(accounts));
-    }
-  }
-  location.reload();
-}
+function resetData(){localStorage.removeItem('guestData'); let currentUser = localStorage.getItem('currentUser'); if(currentUser && currentUser!=='guest'){let accounts=JSON.parse(localStorage.getItem('accounts')||'{}');if(accounts[currentUser]){accounts[currentUser].savedRow=null;localStorage.setItem('accounts',JSON.stringify(accounts));}} location.reload();}
 
 /* ===== WALIMU & MASOMO ===== */
 const walimu=["Denis Maige","Damiani Lushinge","Omari Mniru","Mario Maketa","Method Maginga","Samwel Msabila","Mwansiti Mbwana","Agness Tarence","Joyce Makoli","Nicholous Godfrey","Petro Benjamin","Kinunda Godfrid","Baraka John"];
@@ -162,6 +155,7 @@ function saveRowAndFilter(button){
   let subject = row.querySelector(".subject select").value;
   let table = row.closest('table');
   let savedRowData = { tableId: table.className, rowIndex: Array.from(row.parentNode.children).indexOf(row) };
+  
   let currentUser = localStorage.getItem('currentUser');
   if(currentUser === 'guest'){
     localStorage.setItem('guestData', JSON.stringify(savedRowData));
@@ -172,6 +166,7 @@ function saveRowAndFilter(button){
       localStorage.setItem('accounts', JSON.stringify(accounts));
     }
   }
+
   alert("Kipindi cha "+subject+" kimehifadhiwa");
   table.querySelectorAll("tr").forEach(r=>{
     if(r!==row && r.querySelector("td")) r.style.display="none";
@@ -305,9 +300,14 @@ setTimeout(()=>{
   }
 },500);
 
-/* ===== AUTH FUNCTIONS ===== */
-function showRegister(){ document.getElementById('authScreen').style.display='none'; document.getElementById('registerScreen').style.display='block'; }
-function backToAuth(){ document.getElementById('registerScreen').style.display='none'; document.getElementById('authScreen').style.display='block'; }
+/* ===== AUTH FUNCTIONS – FINAL SNIPPET ===== */
+function continueAsGuest(){
+    localStorage.setItem('currentUser','guest');
+    document.getElementById('authScreen').style.display='none';
+    document.querySelectorAll('.office').forEach(o=>{
+        if(o.id !== 'authScreen' && o.id !== 'registerScreen') o.style.display='block';
+    });
+    alert("Umeingia kama Guest");
+}
 
-function registerAccount(){
-  let username = document.getElementById('regUsername').value
+function register
